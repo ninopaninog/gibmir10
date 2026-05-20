@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Gib Mir 10">
 <meta name="theme-color" content="#060608">
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="manifest.json">
 <title>Gib Mir 10</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
@@ -54,10 +54,11 @@ input::placeholder{color:var(--sub);}
 .stat-n{font-size:30px;font-weight:800;color:var(--red);line-height:1;}
 .stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;margin-top:4px;}
 .sec-hd{width:100%;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--sub);text-transform:uppercase;}
-.pending{width:100%;background:linear-gradient(135deg,rgba(255,45,85,.18),rgba(255,107,53,.12));border:1.5px solid rgba(255,45,85,.35);border-radius:18px;padding:20px;display:none;}
-.pending.show{display:block;}
-.pend-from{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--sub);margin-bottom:4px;}
-.pend-title{font-size:26px;font-weight:800;color:var(--red);line-height:1;margin-bottom:16px;}
+/* Challenge received banner — no fake "lock", just a clear call to action */
+.challenge-banner{width:100%;background:linear-gradient(135deg,rgba(255,45,85,.18),rgba(255,107,53,.12));border:1.5px solid rgba(255,45,85,.4);border-radius:18px;padding:20px;display:none;}
+.challenge-banner.show{display:block;}
+.cb-from{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--sub);margin-bottom:4px;}
+.cb-title{font-size:24px;font-weight:800;color:var(--red);line-height:1.1;margin-bottom:16px;}
 .friends-col{width:100%;display:flex;flex-direction:column;gap:8px;}
 .fr-row{background:var(--s2);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
 .fr-av{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;flex-shrink:0;}
@@ -80,18 +81,6 @@ input::placeholder{color:var(--sub);}
 .sr-card{width:100%;background:var(--s2);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
 .add-btn{flex-shrink:0;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
 .add-btn:disabled{background:var(--s3);color:var(--sub);}
-#s-lock{background:radial-gradient(ellipse 100% 70% at 50% 0%,#1a0008,#060608 65%);z-index:50;justify-content:center;gap:0;}
-.lock-ico{font-size:72px;animation:wiggle .6s ease;margin-bottom:8px;}
-@keyframes wiggle{0%,100%{transform:rotate(0);}25%{transform:rotate(-12deg);}75%{transform:rotate(10deg);}}
-.lock-hed{font-size:52px;font-weight:800;letter-spacing:5px;color:var(--red);text-align:center;line-height:1;}
-.lock-from{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--sub);text-align:center;margin-top:6px;margin-bottom:36px;}
-.ring-wrap{position:relative;width:200px;height:200px;margin-bottom:24px;}
-.ring-svg{width:200px;height:200px;transform:rotate(-90deg);}
-.ring-bg{fill:none;stroke:var(--s2);stroke-width:12;}
-.ring-fill{fill:none;stroke:var(--red);stroke-width:12;stroke-linecap:round;stroke-dasharray:565;stroke-dashoffset:565;transition:stroke-dashoffset .4s,stroke .3s;}
-.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.ring-count{font-size:64px;font-weight:800;line-height:1;}
-.ring-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--sub);text-transform:uppercase;}
 #s-camera{background:#000;padding:0;z-index:100;justify-content:flex-end;}
 #vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 #pc{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1);}
@@ -140,26 +129,16 @@ input::placeholder{color:var(--sub);}
 .t-cta{flex-shrink:0;background:var(--red);color:#fff;border:none;padding:9px 14px;border-radius:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
 .full-spin{position:fixed;inset:0;background:rgba(6,6,8,.9);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:500;}
 .full-spin.show{display:flex;}
-/* Install banner */
-.install-banner{width:100%;background:var(--s2);border:1.5px solid rgba(68,138,255,.4);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
-.install-icon{font-size:28px;flex-shrink:0;}
-.install-txt{flex:1;font-size:13px;line-height:1.4;color:var(--sub);}
-.install-txt strong{color:var(--text);}
 .av0{background:#2d1f3d;color:#c084fc;}.av1{background:#1f2d2d;color:#34d399;}.av2{background:#2d2510;color:#fbbf24;}.av3{background:#1a1f2d;color:#60a5fa;}.av4{background:#2d1f1f;color:#f87171;}
 ::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 </style>
 </head>
 <body>
-
-<div class="full-spin" id="full-spin">
-  <div class="spin"></div>
-  <div class="load-txt" id="full-spin-txt">BITTE WARTEN...</div>
-</div>
-
+<div class="full-spin" id="full-spin"><div class="spin"></div><div class="load-txt" id="full-spin-txt">BITTE WARTEN...</div></div>
 <div class="toast" id="toast">
   <div class="t-ico" id="t-ico">💪</div>
   <div class="t-body"><div class="t-title" id="t-title">—</div><div class="t-sub" id="t-sub">—</div></div>
-  <button class="t-cta" id="t-cta" onclick="toastAct()">DO IT</button>
+  <button class="t-cta" id="t-cta" onclick="toastAct()" style="display:none;">DO IT</button>
 </div>
 
 <!-- SPLASH -->
@@ -177,27 +156,16 @@ input::placeholder{color:var(--sub);}
 
 <!-- SIGNUP -->
 <div class="screen" id="s-signup">
-  <div class="s-hdr" style="margin-bottom:4px;padding-top:16px;">
-    <button class="back-btn" onclick="go('s-splash')">← Zurück</button>
-  </div>
+  <div class="s-hdr" style="margin-bottom:4px;padding-top:16px;"><button class="back-btn" onclick="go('s-splash')">← Zurück</button></div>
   <div class="pg-title">MITMACHEN</div>
   <div class="pg-sub">Username + Anzeigename + 4-stellige PIN.</div>
   <div class="err" id="su-err"></div>
   <div class="vstack">
-    <div class="field">
-      <div class="flabel">Username</div>
-      <input type="text" id="su-user" placeholder="z.B. firesarah" maxlength="20" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="none">
-    </div>
-    <div class="field">
-      <div class="flabel">Anzeigename</div>
-      <input type="text" id="su-disp" placeholder="z.B. Sarah" maxlength="20">
-    </div>
+    <div class="field"><div class="flabel">Username</div><input type="text" id="su-user" placeholder="z.B. firesarah" maxlength="20" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="none"></div>
+    <div class="field"><div class="flabel">Anzeigename</div><input type="text" id="su-disp" placeholder="z.B. Sarah" maxlength="20"></div>
     <div class="field">
       <div class="flabel">PIN wählen</div>
-      <div class="pin-dots" id="su-dots">
-        <div class="pin-dot" id="su-d0"></div><div class="pin-dot" id="su-d1"></div>
-        <div class="pin-dot" id="su-d2"></div><div class="pin-dot" id="su-d3"></div>
-      </div>
+      <div class="pin-dots" id="su-dots"><div class="pin-dot" id="su-d0"></div><div class="pin-dot" id="su-d1"></div><div class="pin-dot" id="su-d2"></div><div class="pin-dot" id="su-d3"></div></div>
       <div class="pin-numpad">
         <button class="pin-key" onclick="pk('su',1)">1</button><button class="pin-key" onclick="pk('su',2)">2</button><button class="pin-key" onclick="pk('su',3)">3</button>
         <button class="pin-key" onclick="pk('su',4)">4</button><button class="pin-key" onclick="pk('su',5)">5</button><button class="pin-key" onclick="pk('su',6)">6</button>
@@ -211,23 +179,15 @@ input::placeholder{color:var(--sub);}
 
 <!-- LOGIN -->
 <div class="screen" id="s-login">
-  <div class="s-hdr" style="margin-bottom:4px;padding-top:16px;">
-    <button class="back-btn" onclick="go('s-splash')">← Zurück</button>
-  </div>
+  <div class="s-hdr" style="margin-bottom:4px;padding-top:16px;"><button class="back-btn" onclick="go('s-splash')">← Zurück</button></div>
   <div class="pg-title">EINLOGGEN</div>
   <div class="pg-sub">Username + PIN eingeben.</div>
   <div class="err" id="li-err"></div>
   <div class="vstack">
-    <div class="field">
-      <div class="flabel">Username</div>
-      <input type="text" id="li-user" placeholder="z.B. firesarah" maxlength="20" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="none">
-    </div>
+    <div class="field"><div class="flabel">Username</div><input type="text" id="li-user" placeholder="z.B. firesarah" maxlength="20" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="none"></div>
     <div class="field">
       <div class="flabel">PIN</div>
-      <div class="pin-dots" id="li-dots">
-        <div class="pin-dot" id="li-d0"></div><div class="pin-dot" id="li-d1"></div>
-        <div class="pin-dot" id="li-d2"></div><div class="pin-dot" id="li-d3"></div>
-      </div>
+      <div class="pin-dots" id="li-dots"><div class="pin-dot" id="li-d0"></div><div class="pin-dot" id="li-d1"></div><div class="pin-dot" id="li-d2"></div><div class="pin-dot" id="li-d3"></div></div>
       <div class="pin-numpad">
         <button class="pin-key" onclick="pk('li',1)">1</button><button class="pin-key" onclick="pk('li',2)">2</button><button class="pin-key" onclick="pk('li',3)">3</button>
         <button class="pin-key" onclick="pk('li',4)">4</button><button class="pin-key" onclick="pk('li',5)">5</button><button class="pin-key" onclick="pk('li',6)">6</button>
@@ -248,55 +208,30 @@ input::placeholder{color:var(--sub);}
       <div class="dash-logo">GIB MIR<br>10 💪</div>
     </div>
   </div>
-  <!-- Install to homescreen banner -->
-  <div class="install-banner" id="install-banner" style="display:none;">
-    <div class="install-icon">📲</div>
-    <div class="install-txt"><strong>Als App installieren</strong><br>Für Push-Notifications zum Homescreen hinzufügen</div>
-    <button class="btn btn-sm" style="background:var(--blue);color:#fff;border:none;" onclick="installApp()">ADD</button>
-  </div>
   <div class="stats">
     <div class="stat"><div class="stat-n" id="st-reps">0</div><div class="stat-l">Reps heute</div></div>
     <div class="stat"><div class="stat-n" id="st-sent">0</div><div class="stat-l">Gesendet</div></div>
     <div class="stat"><div class="stat-n" id="st-streak">1</div><div class="stat-l">Streak</div></div>
   </div>
-  <div class="pending" id="pending">
-    <div class="pend-from" id="pend-from">VON —</div>
-    <div class="pend-title">10 PUSHUPS SCHULDIG 🔒</div>
-    <button class="btn btn-red" onclick="startWorkout()">JETZT MACHEN 💪</button>
+  <!-- Challenge received — simple banner, no fake lock screen -->
+  <div class="challenge-banner" id="ch-banner">
+    <div class="cb-from" id="ch-from">VON —</div>
+    <div class="cb-title">Du schuldest 10 Pushups! 💪</div>
+    <button class="btn btn-red" onclick="startWorkout()">JETZT MACHEN →</button>
   </div>
   <div id="req-sec" style="width:100%;display:none;">
     <div class="sec-hd" style="margin-bottom:8px;">ANFRAGEN <span id="req-badge" style="color:var(--blue);"></span></div>
     <div class="friends-col" id="req-list"></div>
   </div>
   <div class="sec-hd">FREUNDE</div>
-  <div class="friends-col" id="fr-list">
-    <div style="color:var(--sub);font-family:'JetBrains Mono',monospace;font-size:12px;text-align:center;padding:20px;">Noch keine Freunde — tap + ADD</div>
-  </div>
+  <div class="friends-col" id="fr-list"><div style="color:var(--sub);font-family:'JetBrains Mono',monospace;font-size:12px;text-align:center;padding:20px;">Noch keine Freunde — tap + ADD</div></div>
 </div>
 
 <!-- SEARCH -->
 <div class="screen" id="s-search">
   <div class="s-hdr"><button class="back-btn" onclick="go('s-dash')">← Zurück</button><div class="hdr-title">FREUNDE FINDEN</div></div>
-  <div class="field">
-    <div class="flabel">Username suchen</div>
-    <input type="text" id="s-inp" placeholder="z.B. alexfit" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="none" oninput="doSearch()">
-  </div>
+  <div class="field"><div class="flabel">Username suchen</div><input type="text" id="s-inp" placeholder="z.B. alexfit" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="none" oninput="doSearch()"></div>
   <div class="friends-col" id="s-results"></div>
-</div>
-
-<!-- LOCK -->
-<div class="screen" id="s-lock">
-  <div class="lock-ico">🔐</div>
-  <div class="lock-hed">PHONE<br>LOCKED</div>
-  <div class="lock-from" id="lock-from">10 PUSHUPS VON —</div>
-  <div class="ring-wrap">
-    <svg class="ring-svg" viewBox="0 0 200 200">
-      <circle class="ring-bg" cx="100" cy="100" r="90"/>
-      <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="90"/>
-    </svg>
-    <div class="ring-inner"><div class="ring-count" id="ring-n">0</div><div class="ring-lbl">REPS DONE</div></div>
-  </div>
-  <div style="width:100%;"><button class="btn btn-red" onclick="startWorkout()">KAMERA STARTEN →</button></div>
 </div>
 
 <!-- CAMERA -->
@@ -319,13 +254,13 @@ input::placeholder{color:var(--sub);}
 <div class="screen" id="s-done">
   <div class="done-ico">🎉</div>
   <div class="done-title">DONE!</div>
-  <div class="done-sub">PHONE UNLOCKED</div>
+  <div class="done-sub">GUT GEMACHT 💪</div>
   <div class="done-stats">
     <div class="done-stat"><div class="done-sn">10</div><div class="done-sl">Reps</div></div>
     <div class="done-stat"><div class="done-sn" id="d-time">—</div><div class="done-sl">Sek</div></div>
     <div class="done-stat"><div class="done-sn" id="d-form">—</div><div class="done-sl">Form %</div></div>
   </div>
-  <div style="width:100%;margin-top:8px;"><button class="btn btn-green" onclick="afterDone()">ZURÜCK</button></div>
+  <div style="width:100%;margin-top:8px;"><button class="btn btn-green" onclick="go('s-dash')">ZURÜCK</button></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.17.0/dist/tf-core.min.js"></script>
@@ -335,34 +270,46 @@ input::placeholder{color:var(--sub);}
 <script>
 const SUPA_URL='https://gqfkizrbfiozkjgcxpuw.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxZmtpenJiZmlvemtqZ2N4cHV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODk2ODUsImV4cCI6MjA5NDg2NTY4NX0.du5tLXPa5aAG-0FNkducSXSwyF7m1LhoLd8hsG5KTHs';
-const VAPID_PUBLIC='_Yv31_16tHe5wvVRX4JETRgZ0tg3Pgs0L5Xk__d6_e2R0TDmlSb80RpqzTSOMTawc0Dn6IlYQz-2o98ZVztl5A';
+const COOLDOWN_MS = 20 * 60 * 1000; // 20 minutes
 
-async function supa(path,opts={}){
-  const r=await fetch(`${SUPA_URL}/rest/v1/${path}`,{
-    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
-    method:opts.method||'GET',body:opts.body
+async function supa(path, opts={}) {
+  const r = await fetch(`${SUPA_URL}/rest/v1/${path}`, {
+    headers: {'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
+    method: opts.method||'GET', body: opts.body
   });
-  const txt=await r.text();
-  if(!r.ok)throw new Error(txt);
-  return txt?JSON.parse(txt):null;
+  const txt = await r.text();
+  if (!r.ok) throw new Error(txt);
+  return txt ? JSON.parse(txt) : null;
 }
 
-const DB={
-  getUser:u=>supa(`users?username=eq.${encodeURIComponent(u)}&select=*`).then(r=>r&&r[0]||null),
-  createUser:d=>supa('users',{method:'POST',body:JSON.stringify(d)}),
-  updateUser:(u,d)=>supa(`users?username=eq.${encodeURIComponent(u)}`,{method:'PATCH',body:JSON.stringify(d)}),
-  searchUsers:q=>supa(`users?or=(username.ilike.*${encodeURIComponent(q)}*,display.ilike.*${encodeURIComponent(q)}*)&select=username,display,reps_today&limit=8`),
-  getFriendships:u=>supa(`friendships?or=(from_user.eq.${encodeURIComponent(u)},to_user.eq.${encodeURIComponent(u)})&select=*`),
-  createFriendship:d=>supa('friendships',{method:'POST',body:JSON.stringify(d)}),
-  updateFriendship:(id,d)=>supa(`friendships?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(d)}),
-  createChallenge:d=>supa('challenges',{method:'POST',body:JSON.stringify(d)}),
-  getPending:u=>supa(`challenges?to_user=eq.${encodeURIComponent(u)}&completed=eq.false&select=*&order=created_at.desc&limit=1`).then(r=>r&&r[0]||null),
-  completeChallenge:id=>supa(`challenges?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({completed:true})}),
-  getLastCompleted:u=>supa(`challenges?to_user=eq.${encodeURIComponent(u)}&completed=eq.true&select=*&order=created_at.desc&limit=1`).then(r=>r&&r[0]||null),
+const DB = {
+  getUser: u => supa(`users?username=eq.${encodeURIComponent(u)}&select=*`).then(r=>r&&r[0]||null),
+  createUser: d => supa('users',{method:'POST',body:JSON.stringify(d)}),
+  updateUser: (u,d) => supa(`users?username=eq.${encodeURIComponent(u)}`,{method:'PATCH',body:JSON.stringify(d)}),
+  searchUsers: q => supa(`users?or=(username.ilike.*${encodeURIComponent(q)}*,display.ilike.*${encodeURIComponent(q)}*)&select=username,display,reps_today&limit=8`),
+  getFriendships: u => supa(`friendships?or=(from_user.eq.${encodeURIComponent(u)},to_user.eq.${encodeURIComponent(u)})&select=*`),
+  createFriendship: d => supa('friendships',{method:'POST',body:JSON.stringify(d)}),
+  updateFriendship: (id,d) => supa(`friendships?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(d)}),
+  createChallenge: d => supa('challenges',{method:'POST',body:JSON.stringify(d)}),
+  getPending: u => supa(`challenges?to_user=eq.${encodeURIComponent(u)}&completed=eq.false&select=*&order=created_at.desc&limit=1`).then(r=>r&&r[0]||null),
+  completeChallenge: id => supa(`challenges?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({completed:true})}),
+  // Get when this user last COMPLETED pushups (as recipient) — for cooldown
+  getLastDone: u => supa(`challenges?to_user=eq.${encodeURIComponent(u)}&completed=eq.true&select=created_at&order=created_at.desc&limit=1`).then(r=>r&&r[0]||null),
 };
 
-const A={user:null,pending:null,sendCooldownUntil:0,challengesSent:0,friendships:[],screen:'s-splash',repsDone:0,repsRequired:10,goodReps:0,totalReps:0,workoutStart:0,camStream:null,detector:null,rafId:null,toastTimer:null,toastCB:null};
-const pins={su:'',li:''};
+// ── State ──────────────────────────────────────────────────────────────
+const A = {
+  user: null, pending: null,
+  sendCooldownUntil: 0, // timestamp — can't send until this passes
+  challengesSent: 0, friendships: [],
+  screen: 's-splash',
+  // camera
+  repsDone:0, repsRequired:10, goodReps:0, totalReps:0, workoutStart:0,
+  camStream:null, detector:null, rafId:null,
+  // toast
+  toastTimer:null, toastCB:null,
+};
+const pins = {su:'', li:''};
 
 // ── PIN ────────────────────────────────────────────────────────────────
 function pk(id,n){if(pins[id].length>=4)return;pins[id]+=String(n);updDots(id);}
@@ -371,294 +318,308 @@ function updDots(id){for(let i=0;i<4;i++)document.getElementById(`${id}-d${i}`).
 function resetPin(id){pins[id]='';updDots(id);}
 
 // ── Nav ────────────────────────────────────────────────────────────────
-function go(id){
+function go(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  A.screen=id;
-  if(id==='s-dash')renderDash();
-  if(id==='s-camera')initCamera();
-  if(id==='s-search'){document.getElementById('s-inp').value='';document.getElementById('s-results').innerHTML='';}
+  A.screen = id;
+  if (id==='s-dash') renderDash();
+  if (id==='s-camera') initCamera();
+  if (id==='s-search') { document.getElementById('s-inp').value=''; document.getElementById('s-results').innerHTML=''; }
 }
-
 function showSpin(t){document.getElementById('full-spin-txt').textContent=t||'BITTE WARTEN...';document.getElementById('full-spin').classList.add('show');}
 function hideSpin(){document.getElementById('full-spin').classList.remove('show');}
 function showErr(id,msg){const e=document.getElementById(id);e.textContent=msg;e.style.display='block';}
 function hideErr(id){const e=document.getElementById(id);if(e)e.style.display='none';}
 
 // ── Auth ───────────────────────────────────────────────────────────────
-async function doSignup(){
-  const u=document.getElementById('su-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
-  const d=document.getElementById('su-disp').value.trim();
-  const p=pins['su'];
+async function doSignup() {
+  const u = document.getElementById('su-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  const d = document.getElementById('su-disp').value.trim();
+  const p = pins['su'];
   hideErr('su-err');
-  if(!u){showErr('su-err','Username eingeben!');return;}
-  if(!d){showErr('su-err','Anzeigename eingeben!');return;}
-  if(p.length<4){showErr('su-err','4-stellige PIN eingeben!');return;}
+  if (!u) {showErr('su-err','Username eingeben!');return;}
+  if (!d) {showErr('su-err','Anzeigename eingeben!');return;}
+  if (p.length<4) {showErr('su-err','4-stellige PIN eingeben!');return;}
   showSpin('ACCOUNT WIRD ERSTELLT...');
-  try{
-    const exists=await DB.getUser(u);
-    if(exists){hideSpin();showErr('su-err','Username bereits vergeben!');return;}
+  try {
+    const exists = await DB.getUser(u);
+    if (exists) {hideSpin();showErr('su-err','Username bereits vergeben!');return;}
     await DB.createUser({username:u,display:d,reps_today:0,streak:1,pin:p});
-    A.user={username:u,display:d,reps_today:0,streak:1};
+    A.user = {username:u,display:d,reps_today:0,streak:1};
     localStorage.setItem('gm10_sess',u);
-    A.friendships=[];
+    A.friendships = [];
+    await loadCooldown();
     await checkPending();
     connectRT(u);
-    await setupPush();
-    hideSpin();resetPin('su');
+    setupNotifications();
+    hideSpin(); resetPin('su');
     go('s-dash');
-  }catch(e){hideSpin();showErr('su-err','Fehler: '+e.message);}
+  } catch(e) {hideSpin();showErr('su-err','Fehler: '+e.message);}
 }
 
-async function doLogin(){
-  const u=document.getElementById('li-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
-  const p=pins['li'];
+async function doLogin() {
+  const u = document.getElementById('li-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  const p = pins['li'];
   hideErr('li-err');
-  if(!u){showErr('li-err','Username eingeben!');return;}
-  if(p.length<4){showErr('li-err','PIN eingeben!');return;}
+  if (!u) {showErr('li-err','Username eingeben!');return;}
+  if (p.length<4) {showErr('li-err','PIN eingeben!');return;}
   showSpin('EINLOGGEN...');
-  try{
-    const user=await DB.getUser(u);
-    if(!user){hideSpin();showErr('li-err','Username nicht gefunden.');return;}
-    if(user.pin&&user.pin!==p){hideSpin();showErr('li-err','Falsche PIN!');resetPin('li');return;}
-    A.user=user;
+  try {
+    const user = await DB.getUser(u);
+    if (!user) {hideSpin();showErr('li-err','Username nicht gefunden.');return;}
+    if (user.pin && user.pin!==p) {hideSpin();showErr('li-err','Falsche PIN!');resetPin('li');return;}
+    A.user = user;
     localStorage.setItem('gm10_sess',u);
-    A.friendships=await DB.getFriendships(u).catch(()=>[]);
+    A.friendships = await DB.getFriendships(u).catch(()=>[]);
+    await loadCooldown();
     await checkPending();
     connectRT(u);
-    await setupPush();
-    hideSpin();resetPin('li');
+    setupNotifications();
+    hideSpin(); resetPin('li');
     go('s-dash');
-  }catch(e){hideSpin();showErr('li-err','Fehler: '+e.message);}
+  } catch(e) {hideSpin();showErr('li-err','Fehler: '+e.message);}
 }
 
-// ── Push Notifications ─────────────────────────────────────────────────
-let deferredInstallPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();deferredInstallPrompt=e;
-  document.getElementById('install-banner').style.display='flex';
-});
-function installApp(){
-  if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt=null;document.getElementById('install-banner').style.display='none';}
-}
-
-async function setupPush(){
-  try{
-    if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
-    const reg=await navigator.serviceWorker.ready;
-    const perm=await Notification.requestPermission();
-    if(perm!=='granted')return;
-    // Subscribe to push
-    const sub=await reg.pushManager.subscribe({
-      userVisibleOnly:true,
-      applicationServerKey:urlB64ToUint8Array(VAPID_PUBLIC)
-    });
-    // Save subscription to DB
-    await DB.updateUser(A.user.username,{push_sub:JSON.stringify(sub)});
-    console.log('Push subscription saved');
-  }catch(e){console.warn('Push setup failed:',e);}
-}
-
-function urlB64ToUint8Array(b64){
-  const pad='='.repeat((4-b64.length%4)%4);
-  const raw=atob((b64+pad).replace(/-/g,'+').replace(/_/g,'/'));
-  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+// ── Cooldown — load from DB on startup ────────────────────────────────
+async function loadCooldown() {
+  try {
+    const last = await DB.getLastDone(A.user.username);
+    if (last) {
+      const doneAt = new Date(last.created_at).getTime();
+      const until = doneAt + COOLDOWN_MS;
+      if (until > Date.now()) A.sendCooldownUntil = until;
+    }
+  } catch(e) {}
 }
 
 // ── Dashboard ──────────────────────────────────────────────────────────
-async function renderDash(){
-  if(!A.user)return;
-  document.getElementById('d-name').textContent=A.user.display.toUpperCase();
-  document.getElementById('st-reps').textContent=A.user.reps_today||0;
-  document.getElementById('st-sent').textContent=A.challengesSent||0;
-  document.getElementById('st-streak').textContent=A.user.streak||1;
-  const pb=document.getElementById('pending');
-  if(A.pending){pb.classList.add('show');document.getElementById('pend-from').textContent=`VON @${A.pending.from_user.toUpperCase()}`;}
-  else pb.classList.remove('show');
+async function renderDash() {
+  if (!A.user) return;
+  document.getElementById('d-name').textContent = A.user.display.toUpperCase();
+  document.getElementById('st-reps').textContent = A.user.reps_today||0;
+  document.getElementById('st-sent').textContent = A.challengesSent||0;
+  document.getElementById('st-streak').textContent = A.user.streak||1;
+
+  // Challenge banner
+  const banner = document.getElementById('ch-banner');
+  if (A.pending) {
+    banner.classList.add('show');
+    document.getElementById('ch-from').textContent = `VON @${A.pending.from_user.toUpperCase()}`;
+  } else {
+    banner.classList.remove('show');
+  }
+
   // Friend requests
-  const reqs=A.friendships.filter(f=>f.to_user===A.user.username&&f.status==='pending');
-  const rs=document.getElementById('req-sec');
-  if(reqs.length){
-    rs.style.display='block';
-    document.getElementById('req-badge').textContent=`(${reqs.length})`;
-    const users=await Promise.all(reqs.map(r=>DB.getUser(r.from_user).catch(()=>null)));
-    document.getElementById('req-list').innerHTML=reqs.map((r,i)=>{
-      const u=users[i];if(!u)return'';
+  const reqs = A.friendships.filter(f=>f.to_user===A.user.username&&f.status==='pending');
+  const rs = document.getElementById('req-sec');
+  if (reqs.length) {
+    rs.style.display = 'block';
+    document.getElementById('req-badge').textContent = `(${reqs.length})`;
+    const users = await Promise.all(reqs.map(r=>DB.getUser(r.from_user).catch(()=>null)));
+    document.getElementById('req-list').innerHTML = reqs.map((r,i)=>{
+      const u=users[i]; if(!u)return'';
       return`<div class="req-row"><div class="fr-av ${avCls(u.username)}">${avL(u)}</div><div class="req-name">@${u.username}</div><button class="req-btn req-acc" onclick="acceptReq('${r.id}','${u.username}')">✓ Accept</button><button class="req-btn req-dec" onclick="declineReq('${r.id}')">✕</button></div>`;
     }).join('');
-  }else rs.style.display='none';
-  // Friends
-  const friends=A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
-  const fl=document.getElementById('fr-list');
-  if(!friends.length){fl.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:20px;">Noch keine Freunde — tap + ADD</div>';return;}
-  const fUsers=await Promise.all(friends.map(u=>DB.getUser(u).catch(()=>null)));
-  const now=Date.now();
-  const onCd=A.sendCooldownUntil>now;
-  const cdMins=onCd?Math.ceil((A.sendCooldownUntil-now)/60000):0;
-  fl.innerHTML=fUsers.filter(Boolean).map(u=>`<div class="fr-row">
+  } else rs.style.display = 'none';
+
+  // Friends list
+  const friends = A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
+  const fl = document.getElementById('fr-list');
+  if (!friends.length) {fl.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:20px;">Noch keine Freunde — tap + ADD</div>';return;}
+  const fUsers = await Promise.all(friends.map(u=>DB.getUser(u).catch(()=>null)));
+  const now = Date.now();
+  const onCd = A.sendCooldownUntil > now;
+  const cdMins = onCd ? Math.ceil((A.sendCooldownUntil-now)/60000) : 0;
+  fl.innerHTML = fUsers.filter(Boolean).map(u=>`<div class="fr-row">
     <div class="fr-av ${avCls(u.username)}">${avL(u)}</div>
     <div class="fr-info"><div class="fr-name">${u.display}</div><div class="fr-meta">@${u.username} · ${u.reps_today||0} reps heute</div></div>
-    ${onCd?`<div class="cd-pill">⏳ ${cdMins}m warten</div>`:`<button class="fire-btn" onclick="sendChallenge('${u.username}')">💪 SEND</button>`}
+    ${onCd
+      ? `<div class="cd-pill">⏳ ${cdMins}m</div>`
+      : `<button class="fire-btn" onclick="sendChallenge('${u.username}')">💪 SEND</button>`
+    }
   </div>`).join('');
+
+  // Auto-refresh cooldown countdown
+  if (onCd) setTimeout(()=>{ if(A.screen==='s-dash') renderDash(); }, 60000);
 }
 
-async function sendChallenge(to){
-  if(A.sendCooldownUntil>Date.now()){
-    const mins=Math.ceil((A.sendCooldownUntil-Date.now())/60000);
-    toast('⏳',`Noch ${mins} Min warten!`,'Cooldown nach deinen Pushups',null);return;
+// ── Send challenge ─────────────────────────────────────────────────────
+async function sendChallenge(to) {
+  // HARD CHECK — block if cooldown active
+  const now = Date.now();
+  if (A.sendCooldownUntil > now) {
+    const mins = Math.ceil((A.sendCooldownUntil - now) / 60000);
+    toast('⏳', `Noch ${mins} Min warten!`, 'Cooldown nach deinen Pushups', null);
+    return;
   }
-  try{
-    await DB.createChallenge({from_user:A.user.username,to_user:to,reps:10,completed:false});
-    A.challengesSent=(A.challengesSent||0)+1;
-    toast('📨',`Challenge an @${to}!`,'Warte auf ihre Liegestütze 😈',null);
+  try {
+    await DB.createChallenge({from_user:A.user.username, to_user:to, reps:10, completed:false});
+    A.challengesSent = (A.challengesSent||0) + 1;
+    toast('📨', `Challenge an @${to}!`, 'Warte auf ihre Liegestütze 😈', null);
     renderDash();
-  }catch(e){toast('❌','Fehler',e.message,null);}
+  } catch(e) { toast('❌','Fehler',e.message,null); }
 }
 
 // ── Friends ────────────────────────────────────────────────────────────
-async function doSearch(){
-  const q=document.getElementById('s-inp').value.trim();
-  const c=document.getElementById('s-results');
-  if(!q){c.innerHTML='';return;}
-  try{
-    const res=(await DB.searchUsers(q)).filter(u=>u.username!==A.user.username);
-    if(!res.length){c.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:16px;">Niemanden gefunden</div>';return;}
-    const myF=A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
-    const pend=A.friendships.filter(f=>f.from_user===A.user.username&&f.status==='pending').map(f=>f.to_user);
-    c.innerHTML=res.map(u=>{
-      const isFr=myF.includes(u.username),isSent=pend.includes(u.username);
+async function doSearch() {
+  const q = document.getElementById('s-inp').value.trim();
+  const c = document.getElementById('s-results');
+  if (!q) {c.innerHTML='';return;}
+  try {
+    const res = (await DB.searchUsers(q)).filter(u=>u.username!==A.user.username);
+    if (!res.length) {c.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:16px;">Niemanden gefunden</div>';return;}
+    const myF = A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
+    const pend = A.friendships.filter(f=>f.from_user===A.user.username&&f.status==='pending').map(f=>f.to_user);
+    c.innerHTML = res.map(u=>{
+      const isFr=myF.includes(u.username), isSent=pend.includes(u.username);
       return`<div class="sr-card"><div class="fr-av ${avCls(u.username)}">${avL(u)}</div><div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:15px;">${u.display}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sub);margin-top:2px;">@${u.username} · ${u.reps_today||0} reps</div></div>${isFr?'<button class="add-btn" disabled>✓</button>':isSent?'<button class="add-btn" disabled style="background:var(--s3);color:var(--sub);">SENT</button>':`<button class="add-btn" onclick="sendReq('${u.username}')">ADD +</button>`}</div>`;
     }).join('');
-  }catch(e){c.innerHTML=`<div style="color:var(--red);font-size:12px;padding:16px;">Fehler: ${e.message}</div>`;}
+  } catch(e) {c.innerHTML=`<div style="color:var(--red);font-size:12px;padding:16px;">Fehler: ${e.message}</div>`;}
 }
-async function sendReq(to){
-  try{await DB.createFriendship({from_user:A.user.username,to_user:to,status:'pending'});A.friendships=await DB.getFriendships(A.user.username);doSearch();toast('📨',`Anfrage an @${to}!`,'Muss akzeptiert werden',null);}
-  catch(e){toast('❌','Fehler',e.message,null);}
+async function sendReq(to) {
+  try {await DB.createFriendship({from_user:A.user.username,to_user:to,status:'pending'});A.friendships=await DB.getFriendships(A.user.username);doSearch();toast('📨',`Anfrage an @${to}!`,'Muss akzeptiert werden',null);}
+  catch(e) {toast('❌','Fehler',e.message,null);}
 }
-async function acceptReq(id,from){
-  try{await DB.updateFriendship(id,{status:'accepted'});A.friendships=await DB.getFriendships(A.user.username);renderDash();toast('✅',`@${from} ist jetzt dein Freund!`,'',null);}catch(e){}
+async function acceptReq(id,from) {
+  try {await DB.updateFriendship(id,{status:'accepted'});A.friendships=await DB.getFriendships(A.user.username);renderDash();toast('✅',`@${from} ist jetzt dein Freund!`,'',null);} catch(e){}
 }
-async function declineReq(id){
-  try{await DB.updateFriendship(id,{status:'declined'});A.friendships=await DB.getFriendships(A.user.username);renderDash();}catch(e){}
+async function declineReq(id) {
+  try {await DB.updateFriendship(id,{status:'declined'});A.friendships=await DB.getFriendships(A.user.username);renderDash();} catch(e){}
 }
 
-// ── Challenge / Lock ───────────────────────────────────────────────────
-async function checkPending(){
-  try{const ch=await DB.getPending(A.user.username);if(ch){A.pending=ch;document.getElementById('lock-from').textContent=`10 PUSHUPS VON @${ch.from_user.toUpperCase()}`;updateRing(0);}}catch(e){}
-  try{
-    const last=await DB.getLastCompleted(A.user.username);
-    if(last){const end=new Date(last.created_at).getTime()+20*60*1000;if(end>Date.now())A.sendCooldownUntil=end;}
-  }catch(e){}
+// ── Challenge received ─────────────────────────────────────────────────
+async function checkPending() {
+  try {
+    const ch = await DB.getPending(A.user.username);
+    if (ch) { A.pending = ch; }
+  } catch(e) {}
 }
-function onIncoming(ch){
-  A.pending=ch;
-  document.getElementById('lock-from').textContent=`10 PUSHUPS VON @${ch.from_user.toUpperCase()}`;
-  updateRing(0);
-  if(A.screen==='s-dash')renderDash();
-  toast('🔒',`@${ch.from_user} challengt dich!`,'10 Pushups jetzt machen!','lock');
-  // Show SW notification if app is in background
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.ready.then(reg=>{
-      reg.showNotification('💪 Gib Mir 10!',{
-        body:`@${ch.from_user} fordert dich zu 10 Pushups heraus!`,
-        tag:'challenge',requireInteraction:true,
-        data:{url:'/?challenge=1'}
+
+function onIncoming(ch) {
+  if (A.pending && A.pending.id === ch.id) return; // already know about it
+  A.pending = ch;
+  if (A.screen==='s-dash') renderDash();
+  toast('🔒', `@${ch.from_user} challengt dich!`, '10 Pushups jetzt machen! 💪', 'workout');
+  // Show notification if available
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(reg => {
+      reg.showNotification('💪 Gib Mir 10!', {
+        body: `@${ch.from_user} fordert dich zu 10 Pushups heraus!`,
+        tag: 'challenge', requireInteraction: true
       });
     }).catch(()=>{});
   }
 }
-function startWorkout(){A.repsDone=0;A.goodReps=0;A.totalReps=0;A.workoutStart=Date.now();go('s-camera');}
-function updateRing(n){
-  document.getElementById('ring-fill').style.strokeDashoffset=565-(n/10)*565;
-  document.getElementById('ring-n').textContent=n;
-  document.getElementById('ring-fill').style.stroke=n>=10?'var(--green)':'var(--red)';
+
+function startWorkout() {
+  A.repsDone=0; A.goodReps=0; A.totalReps=0; A.workoutStart=Date.now();
+  go('s-camera');
 }
 
-// ── Realtime ───────────────────────────────────────────────────────────
-function connectRT(username){
-  try{
-    const ws=new WebSocket(`wss://gqfkizrbfiozkjgcxpuw.supabase.co/realtime/v1/websocket?apikey=${SUPA_KEY}&vsn=1.0.0`);
-    ws.onopen=()=>ws.send(JSON.stringify({
-      topic:'realtime:public:challenges',event:'phx_join',ref:'1',
-      payload:{config:{postgres_changes:[{event:'INSERT',schema:'public',table:'challenges',filter:`to_user=eq.${username}`}]}}
-    }));
-    ws.onmessage=e=>{
-      try{
-        const m=JSON.parse(e.data);
-        const rec=m.payload?.data?.record||m.payload?.record;
-        if(rec&&rec.to_user===username&&!rec.completed)onIncoming(rec);
-      }catch{}
-    };
-    ws.onclose=()=>setTimeout(()=>connectRT(username),3000);
-    // Also poll every 30s as fallback
-    setInterval(async()=>{
-      if(!A.user||A.pending)return;
-      try{const ch=await DB.getPending(username);if(ch&&(!A.pending||ch.id!==A.pending.id))onIncoming(ch);}catch{}
-    },30000);
-  }catch(e){}
+// ── Realtime — WebSocket + polling fallback ────────────────────────────
+function connectRT(username) {
+  let ws;
+  function connect() {
+    try {
+      ws = new WebSocket(`wss://gqfkizrbfiozkjgcxpuw.supabase.co/realtime/v1/websocket?apikey=${SUPA_KEY}&vsn=1.0.0`);
+      ws.onopen = () => {
+        ws.send(JSON.stringify({
+          topic: 'realtime:public:challenges',
+          event: 'phx_join', ref: '1',
+          payload: {config:{postgres_changes:[{event:'INSERT',schema:'public',table:'challenges',filter:`to_user=eq.${username}`}]}}
+        }));
+      };
+      ws.onmessage = e => {
+        try {
+          const m = JSON.parse(e.data);
+          const rec = m.payload?.data?.record || m.payload?.record;
+          if (rec && rec.to_user===username && !rec.completed) onIncoming(rec);
+        } catch {}
+      };
+      ws.onclose = () => setTimeout(connect, 3000);
+    } catch(e) {}
+  }
+  connect();
+  // Polling fallback every 15s — catches anything WebSocket misses
+  setInterval(async () => {
+    if (!A.user) return;
+    try {
+      const ch = await DB.getPending(username);
+      if (ch && (!A.pending || ch.id !== A.pending.id)) onIncoming(ch);
+    } catch {}
+  }, 15000);
 }
 
-// ── MoveNet ────────────────────────────────────────────────────────────
-let vid,canvas,ctx2,lastState='up',detecting=false;
-async function initCamera(){
-  vid=document.getElementById('vid');canvas=document.getElementById('pc');ctx2=canvas.getContext('2d');
-  A.repsDone=0;A.goodReps=0;A.totalReps=0;lastState='up';detecting=false;
-  updateCamUI();showLoad('KAMERA STARTET...');
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});
-    A.camStream=stream;vid.srcObject=stream;
+// ── Notifications ──────────────────────────────────────────────────────
+async function setupNotifications() {
+  try {
+    if (!('serviceWorker' in navigator)) return;
+    await navigator.serviceWorker.register('sw.js');
+    if (Notification.permission === 'default') await Notification.requestPermission();
+  } catch(e) {}
+}
+
+// ── MoveNet Camera ─────────────────────────────────────────────────────
+let vid, canvas, ctx2, lastState='up', detecting=false;
+async function initCamera() {
+  vid=document.getElementById('vid'); canvas=document.getElementById('pc'); ctx2=canvas.getContext('2d');
+  A.repsDone=0; A.goodReps=0; A.totalReps=0; lastState='up'; detecting=false;
+  updateCamUI(); showLoad('KAMERA STARTET...');
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});
+    A.camStream=stream; vid.srcObject=stream;
     await new Promise(r=>{vid.onloadedmetadata=r;});
-    canvas.width=vid.videoWidth||640;canvas.height=vid.videoHeight||480;
+    canvas.width=vid.videoWidth||640; canvas.height=vid.videoHeight||480;
     showLoad('KI MODELL LÄDT...');
-    if(!A.detector)A.detector=await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet,{modelType:poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,enableSmoothing:true});
-    hideLoad();startLoop();
-  }catch(e){console.warn(e);hideLoad();startSim();}
+    if (!A.detector) A.detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet,{modelType:poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,enableSmoothing:true});
+    hideLoad(); startLoop();
+  } catch(e) {console.warn(e); hideLoad(); startSim();}
 }
-function startLoop(){
+function startLoop() {
   detecting=true;
-  const loop=async()=>{
-    if(!detecting||A.screen!=='s-camera')return;
-    try{const poses=await A.detector.estimatePoses(vid);if(poses?.length)processPose(poses[0]);else setPill('ZEIG DEINEN KÖRPER','bad');}catch(e){}
-    A.rafId=requestAnimationFrame(loop);
+  const loop = async () => {
+    if (!detecting||A.screen!=='s-camera') return;
+    try {const poses=await A.detector.estimatePoses(vid);if(poses?.length)processPose(poses[0]);else setPill('ZEIG DEINEN KÖRPER','bad');} catch(e){}
+    A.rafId = requestAnimationFrame(loop);
   };
-  A.rafId=requestAnimationFrame(loop);
+  A.rafId = requestAnimationFrame(loop);
 }
-function processPose(pose){
-  const kp=pose.keypoints;drawSkel(kp);
+function processPose(pose) {
+  const kp=pose.keypoints; drawSkel(kp);
   const g=i=>kp[i]&&kp[i].score>0.25?kp[i]:null;
   const ls=g(5),rs=g(6),le=g(7),re=g(8),lw=g(9),rw=g(10),lh=g(11),rh=g(12),la=g(15),ra=g(16);
-  if(!ls||!rs||!le||!re){setPill('GANZEN KÖRPER ZEIGEN','bad');clearFB();return;}
-  const sY=(ls.y+rs.y)/2,hY=lh&&rh?(lh.y+rh.y)/2:sY;
-  if(Math.abs(sY-hY)>canvas.height*.25){setPill('LIEGESTÜTZPOSITION!','bad');clearFB();return;}
+  if (!ls||!rs||!le||!re) {setPill('GANZEN KÖRPER ZEIGEN','bad');clearFB();return;}
+  const sY=(ls.y+rs.y)/2, hY=lh&&rh?(lh.y+rh.y)/2:sY;
+  if (Math.abs(sY-hY)>canvas.height*.25) {setPill('LIEGESTÜTZPOSITION!','bad');clearFB();return;}
   const issues=[];
   const aY=la&&ra?(la.y+ra.y)/2:sY+canvas.height*.3;
-  if(lh&&rh&&(hY-(sY+aY)/2)>canvas.height*.08)issues.push({pass:false,msg:'HÜFTE HÄNGT — KERN AN!'});
+  if (lh&&rh&&(hY-(sY+aY)/2)>canvas.height*.08) issues.push({pass:false,msg:'HÜFTE HÄNGT — KERN AN!'});
   else issues.push({pass:true,msg:'KÖRPERHALTUNG ✓'});
   const nose=g(0);
-  if(nose)issues.push(Math.abs(nose.x-(ls.x+rs.x)/2)<canvas.width*.25?{pass:true,msg:'KOPFPOSITION ✓'}:{pass:false,msg:'NACKEN NEUTRAL'});
-  const la_=lw?calcAng(ls,le,lw):null,ra_=rw?calcAng(rs,re,rw):null;
+  if (nose) issues.push(Math.abs(nose.x-(ls.x+rs.x)/2)<canvas.width*.25?{pass:true,msg:'KOPFPOSITION ✓'}:{pass:false,msg:'NACKEN NEUTRAL'});
+  const la_=lw?calcAng(ls,le,lw):null, ra_=rw?calcAng(rs,re,rw):null;
   const avg=la_!==null&&ra_!==null?(la_+ra_)/2:la_??ra_??160;
   const clean=!issues.some(i=>!i.pass);
   showFB(issues);
-  if(avg<90&&lastState==='up'){lastState='down';setPill('RUNTER ↓ HALTEN','good');}
-  else if(avg>155&&lastState==='down'){lastState='up';A.totalReps++;if(clean)A.goodReps++;countRep(clean);}
-  else if(lastState==='up')setPill('GEHE RUNTER ↓','');
+  if (avg<90&&lastState==='up') {lastState='down';setPill('RUNTER ↓ HALTEN','good');}
+  else if (avg>155&&lastState==='down') {lastState='up';A.totalReps++;if(clean)A.goodReps++;countRep(clean);}
+  else if (lastState==='up') setPill('GEHE RUNTER ↓','');
   else setPill('HOCH DRÜCKEN ↑','good');
 }
-function drawSkel(kp){
+function drawSkel(kp) {
   ctx2.clearRect(0,0,canvas.width,canvas.height);
   [[5,6],[5,7],[7,9],[6,8],[8,10],[5,11],[6,12],[11,12],[11,13],[13,15],[12,14],[14,16]].forEach(([a,b])=>{
-    const pa=kp[a],pb=kp[b];if(!pa||!pb||pa.score<0.25||pb.score<0.25)return;
+    const pa=kp[a],pb=kp[b]; if(!pa||!pb||pa.score<0.25||pb.score<0.25)return;
     ctx2.strokeStyle='#448aff';ctx2.lineWidth=3;ctx2.beginPath();ctx2.moveTo(pa.x,pa.y);ctx2.lineTo(pb.x,pb.y);ctx2.stroke();
   });
   kp.forEach(p=>{if(!p||p.score<0.25)return;ctx2.beginPath();ctx2.arc(p.x,p.y,6,0,Math.PI*2);ctx2.fillStyle='#fff';ctx2.fill();ctx2.strokeStyle='#448aff';ctx2.lineWidth=2;ctx2.stroke();});
 }
 function calcAng(a,b,c){let d=Math.abs((Math.atan2(c.y-b.y,c.x-b.x)-Math.atan2(a.y-b.y,a.x-b.x))*180/Math.PI);if(d>180)d=360-d;return d;}
-function countRep(good){
-  A.repsDone++;updateCamUI();updateRing(A.repsDone);
-  const el=document.getElementById('c-cnt');el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),280);
+function countRep(good) {
+  A.repsDone++; updateCamUI();
+  const el=document.getElementById('c-cnt'); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),280);
   setPill(good?`REP ${A.repsDone} ✓ SAUBER!`:`REP ${A.repsDone} — FORM CHECK`,good?'good':'bad');
-  if(A.repsDone>=A.repsRequired)setTimeout(complete,600);
+  if (A.repsDone>=A.repsRequired) setTimeout(complete,600);
 }
 function updateCamUI(){
   document.getElementById('c-cnt').textContent=A.repsDone;
@@ -666,15 +627,15 @@ function updateCamUI(){
   document.getElementById('c-prog').style.width=`${(A.repsDone/A.repsRequired)*100}%`;
 }
 function setPill(t,c){document.getElementById('c-pill-txt').textContent=t;document.getElementById('c-pill').className='pill'+(c?` ${c}`:'');}
-function showFB(i){const el=document.getElementById('form-fb');el.innerHTML=i.slice(0,3).map(x=>`<div class="fbi ${x.pass?'pass':'fail'}"><div class="fbd"></div>${x.msg}</div>`).join('');el.classList.add('show');}
+function showFB(items){const el=document.getElementById('form-fb');el.innerHTML=items.slice(0,3).map(i=>`<div class="fbi ${i.pass?'pass':'fail'}"><div class="fbd"></div>${i.msg}</div>`).join('');el.classList.add('show');}
 function clearFB(){document.getElementById('form-fb').classList.remove('show');}
 function startSim(){
   setPill('TIPPE ZUM SIMULIEREN','good');
   document.getElementById('form-fb').innerHTML='<div class="fbi pass"><div class="fbd"></div>SIMULATIONS-MODUS</div>';
   document.getElementById('form-fb').classList.add('show');
-  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-  const cx=canvas.width/2,cy=canvas.height*.42;
-  ctx2.strokeStyle='#448aff';ctx2.lineWidth=3;
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const cx=canvas.width/2, cy=canvas.height*.42;
+  ctx2.strokeStyle='#448aff'; ctx2.lineWidth=3;
   const pts=[[cx,cy-60],[cx-60,cy-20],[cx+60,cy-20],[cx-75,cy+30],[cx+75,cy+30],[cx-80,cy+80],[cx+80,cy+80],[cx,cy+40],[cx-30,cy+120],[cx+30,cy+120],[cx-30,cy+200],[cx+30,cy+200]];
   [[0,1],[0,2],[1,2],[1,3],[3,5],[2,4],[4,6],[0,7],[7,8],[7,9],[8,10],[9,11]].forEach(([a,b])=>{ctx2.beginPath();ctx2.moveTo(...pts[a]);ctx2.lineTo(...pts[b]);ctx2.stroke();});
   ctx2.beginPath();ctx2.arc(cx,cy-78,20,0,Math.PI*2);ctx2.stroke();
@@ -683,25 +644,27 @@ function startSim(){
   const h=e=>{if(A.screen!=='s-camera'){cam.removeEventListener('click',h);return;}if(e.target.tagName==='BUTTON')return;countRep(Math.random()>.2);if(A.repsDone>=A.repsRequired)cam.removeEventListener('click',h);};
   cam.addEventListener('click',h);
 }
-async function complete(){
+
+async function complete() {
   stopCam();
   const elapsed=Math.round((Date.now()-A.workoutStart)/1000);
   const formPct=A.totalReps>0?Math.round((A.goodReps/A.totalReps)*100):100;
   document.getElementById('d-time').textContent=elapsed;
   document.getElementById('d-form').textContent=formPct+'%';
-  try{
-    if(A.pending?.id)await DB.completeChallenge(A.pending.id);
+  try {
+    if (A.pending?.id) await DB.completeChallenge(A.pending.id);
     A.user.reps_today=(A.user.reps_today||0)+A.repsRequired;
     await DB.updateUser(A.user.username,{reps_today:A.user.reps_today});
-  }catch(e){}
-  A.sendCooldownUntil=Date.now()+20*60*1000;
-  A.pending=null;
+  } catch(e) {}
+  // Set cooldown — 20 min before they can send challenges again
+  A.sendCooldownUntil = Date.now() + COOLDOWN_MS;
+  A.pending = null;
   go('s-done');
 }
-function afterDone(){go('s-dash');}
-function closeCamera(){stopCam();if(A.pending)go('s-lock');else go('s-dash');}
+
+function closeCamera(){stopCam();go('s-dash');}
 function stopCam(){
-  detecting=false;if(A.rafId){cancelAnimationFrame(A.rafId);A.rafId=null;}
+  detecting=false; if(A.rafId){cancelAnimationFrame(A.rafId);A.rafId=null;}
   if(A.camStream){A.camStream.getTracks().forEach(t=>t.stop());A.camStream=null;}
   if(vid)vid.srcObject=null;
 }
@@ -710,11 +673,15 @@ function hideLoad(){document.getElementById('load-ov').style.display='none';}
 
 // ── Toast ──────────────────────────────────────────────────────────────
 function toast(ico,title,sub,action){
-  document.getElementById('t-ico').textContent=ico;document.getElementById('t-title').textContent=title;document.getElementById('t-sub').textContent=sub;
+  document.getElementById('t-ico').textContent=ico;
+  document.getElementById('t-title').textContent=title;
+  document.getElementById('t-sub').textContent=sub;
   const cta=document.getElementById('t-cta');
-  if(action==='lock'){cta.style.display='block';A.toastCB=()=>go('s-lock');}else{cta.style.display='none';A.toastCB=null;}
+  if(action==='workout'){cta.style.display='block';A.toastCB=()=>startWorkout();}
+  else{cta.style.display='none';A.toastCB=null;}
   document.getElementById('toast').classList.add('show');
-  clearTimeout(A.toastTimer);A.toastTimer=setTimeout(hideToast,action==='lock'?10000:3500);
+  clearTimeout(A.toastTimer);
+  A.toastTimer=setTimeout(hideToast,action?10000:3500);
 }
 function hideToast(){document.getElementById('toast').classList.remove('show');}
 function toastAct(){hideToast();if(A.toastCB)A.toastCB();}
@@ -722,13 +689,6 @@ function toastAct(){hideToast();if(A.toastCB)A.toastCB();}
 // ── Utils ──────────────────────────────────────────────────────────────
 function avL(u){return u?(u.display||u.username||'?')[0].toUpperCase():'?';}
 function avCls(u){const c=['av0','av1','av2','av3','av4'];let h=0;for(const x of(u||''))h+=x.charCodeAt(0);return c[h%5];}
-
-// ── Service Worker registration ────────────────────────────────────────
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/sw.js').then(reg=>{
-    console.log('SW registered');
-  }).catch(e=>console.warn('SW failed:',e));
-}
 
 // ── Restore session ────────────────────────────────────────────────────
 (async()=>{
@@ -740,9 +700,10 @@ if('serviceWorker' in navigator){
     if(user){
       A.user=user;
       A.friendships=await DB.getFriendships(sess).catch(()=>[]);
+      await loadCooldown();
       await checkPending();
       connectRT(sess);
-      await setupPush();
+      setupNotifications();
       hideSpin();
       go('s-dash');
     }else hideSpin();

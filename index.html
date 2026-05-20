@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -27,6 +27,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .btn-red{background:var(--red);color:#fff;}
 .btn-ghost{background:var(--s2);color:var(--text);border:1.5px solid var(--border);}
 .btn-green{background:var(--green);color:#060608;}
+.btn-orange{background:var(--orange);color:#fff;}
 .btn-sm{padding:11px 18px;font-size:13px;border-radius:10px;width:auto;}
 .vstack{width:100%;display:flex;flex-direction:column;gap:14px;}
 .field{width:100%;display:flex;flex-direction:column;gap:6px;}
@@ -52,12 +53,17 @@ input::placeholder{color:var(--sub);}
 .stats{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .stat{background:var(--s2);border:1.5px solid var(--border);border-radius:14px;padding:14px 12px;}
 .stat-n{font-size:30px;font-weight:800;color:var(--red);line-height:1;}
+.stat-n.debt{color:var(--orange);}
 .stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;margin-top:4px;}
 .sec-hd{width:100%;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--sub);text-transform:uppercase;}
-.ch-banner{width:100%;background:linear-gradient(135deg,rgba(255,45,85,.18),rgba(255,107,53,.12));border:1.5px solid rgba(255,45,85,.4);border-radius:18px;padding:20px;display:none;}
+.ch-banner{width:100%;border-radius:18px;padding:20px;display:none;}
 .ch-banner.show{display:block;}
+.ch-banner.normal{background:linear-gradient(135deg,rgba(255,45,85,.18),rgba(255,107,53,.12));border:1.5px solid rgba(255,45,85,.4);}
+.ch-banner.doubled{background:linear-gradient(135deg,rgba(255,107,53,.25),rgba(255,214,0,.1));border:1.5px solid rgba(255,107,53,.6);}
 .ch-from{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--sub);margin-bottom:4px;}
-.ch-title{font-size:24px;font-weight:800;color:var(--red);line-height:1.1;margin-bottom:16px;}
+.ch-title{font-size:24px;font-weight:800;line-height:1.1;margin-bottom:8px;}
+.ch-timer{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub);margin-bottom:16px;}
+.ch-timer.warn{color:var(--orange);}
 .friends-col{width:100%;display:flex;flex-direction:column;gap:8px;}
 .fr-row{background:var(--s2);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
 .fr-av{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;flex-shrink:0;}
@@ -69,6 +75,8 @@ input::placeholder{color:var(--sub);}
 .cd-pill{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--orange);background:rgba(255,107,53,.12);border-radius:8px;padding:6px 10px;flex-shrink:0;white-space:nowrap;}
 .done-pill{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);background:rgba(0,230,118,.1);border-radius:8px;padding:6px 10px;flex-shrink:0;}
 .pending-pill{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--orange);background:rgba(255,107,53,.1);border-radius:8px;padding:6px 10px;flex-shrink:0;}
+.overdue-pill{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);background:rgba(255,45,85,.15);border-radius:8px;padding:6px 10px;flex-shrink:0;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.4;}}
 .req-row{background:var(--s2);border:1.5px solid rgba(68,138,255,.3);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .req-name{flex:1;font-size:15px;font-weight:700;}
 .req-btn{border:none;border-radius:9px;padding:8px 14px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
@@ -138,7 +146,7 @@ input::placeholder{color:var(--sub);}
 <div class="toast" id="toast">
   <div class="t-ico" id="t-ico">💪</div>
   <div class="t-body"><div class="t-title" id="t-title">—</div><div class="t-sub" id="t-sub">—</div></div>
-  <button class="t-cta" id="t-cta" onclick="toastAct()">DO IT</button>
+  <button class="t-cta" id="t-cta" onclick="toastAct()">LOS!</button>
 </div>
 
 <!-- SPLASH -->
@@ -146,7 +154,7 @@ input::placeholder{color:var(--sub);}
   <div class="splash-wrap">
     <div class="splash-icon">💪</div>
     <div class="splash-word">GIB MIR 10</div>
-    <div class="splash-tag">No reps · No phone</div>
+    <div class="splash-tag">Keine Reps · Kein Handy</div>
   </div>
   <div class="vstack">
     <button class="btn btn-red" onclick="go('s-signup')">ACCOUNT ERSTELLEN</button>
@@ -210,16 +218,15 @@ input::placeholder{color:var(--sub);}
   </div>
   <div class="stats">
     <div class="stat"><div class="stat-n" id="st-reps">0</div><div class="stat-l">Reps heute</div></div>
-    <div class="stat"><div class="stat-n" id="st-sent">0</div><div class="stat-l">Gesendet</div></div>
-    <div class="stat"><div class="stat-n" id="st-streak">1</div><div class="stat-l">Streak</div></div>
+    <div class="stat"><div class="stat-n debt" id="st-debt">0</div><div class="stat-l">Schulden 🔥</div></div>
+    <div class="stat"><div class="stat-n" id="st-week">0</div><div class="stat-l">Reps Woche</div></div>
   </div>
-  <!-- Incoming challenge banner -->
   <div class="ch-banner" id="ch-banner">
     <div class="ch-from" id="ch-from">VON —</div>
-    <div class="ch-title">Du schuldest 10 Pushups! 💪</div>
-    <button class="btn btn-red" onclick="startWorkout()">JETZT MACHEN →</button>
+    <div class="ch-title" id="ch-title">Du schuldest Pushups! 💪</div>
+    <div class="ch-timer" id="ch-timer"></div>
+    <button class="btn btn-red" id="ch-btn" onclick="startWorkout()">JETZT MACHEN →</button>
   </div>
-  <!-- Friend requests -->
   <div id="req-sec" style="width:100%;display:none;">
     <div class="sec-hd" style="margin-bottom:8px;">ANFRAGEN <span id="req-badge" style="color:var(--blue);"></span></div>
     <div class="friends-col" id="req-list"></div>
@@ -242,7 +249,7 @@ input::placeholder{color:var(--sub);}
   <div class="load-ov" id="load-ov"><div class="spin"></div><div class="load-txt" id="load-txt">LÄDT...</div></div>
   <div class="cam-top">
     <button class="cam-close" onclick="closeCamera()">✕</button>
-    <div class="cam-pw"><div class="cam-rl" id="c-rl">10 REPS ÜBRIG</div><div class="cam-bar"><div class="cam-bar-fill" id="c-prog"></div></div></div>
+    <div class="cam-pw"><div class="cam-rl" id="c-rl">— REPS ÜBRIG</div><div class="cam-bar"><div class="cam-bar-fill" id="c-prog"></div></div></div>
   </div>
   <div class="form-fb" id="form-fb"></div>
   <div class="cam-bot">
@@ -255,9 +262,9 @@ input::placeholder{color:var(--sub);}
 <div class="screen" id="s-done">
   <div class="done-ico">🎉</div>
   <div class="done-title">DONE!</div>
-  <div class="done-sub">GUT GEMACHT 💪</div>
+  <div class="done-sub" id="done-sub">GUT GEMACHT 💪</div>
   <div class="done-stats">
-    <div class="done-stat"><div class="done-sn">10</div><div class="done-sl">Reps</div></div>
+    <div class="done-stat"><div class="done-sn" id="d-reps">—</div><div class="done-sl">Reps</div></div>
     <div class="done-stat"><div class="done-sn" id="d-time">—</div><div class="done-sl">Sek</div></div>
     <div class="done-stat"><div class="done-sn" id="d-form">—</div><div class="done-sl">Form %</div></div>
   </div>
@@ -269,350 +276,505 @@ input::placeholder{color:var(--sub);}
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.17.0/dist/tf-backend-webgl.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@2.1.3/dist/pose-detection.min.js"></script>
 <script>
-const SUPA_URL = 'https://gqfkizrbfiozkjgcxpuw.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxZmtpenJiZmlvemtqZ2N4cHV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODk2ODUsImV4cCI6MjA5NDg2NTY4NX0.du5tLXPa5aAG-0FNkducSXSwyF7m1LhoLd8hsG5KTHs';
-const COOLDOWN_MS = 20 * 60 * 1000;
+const SUPA_URL='https://gqfkizrbfiozkjgcxpuw.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxZmtpenJiZmlvemtqZ2N4cHV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODk2ODUsImV4cCI6MjA5NDg2NTY4NX0.du5tLXPa5aAG-0FNkducSXSwyF7m1LhoLd8hsG5KTHs';
+const COOLDOWN_MS = 20*60*1000;
+const DOUBLE_AFTER_MS = 60*60*1000; // 1 hour → double reps
+const DOUBLE_NEXT_DAY = true; // unpaid challenges double overnight
 
-async function supa(path, opts={}) {
-  const r = await fetch(`${SUPA_URL}/rest/v1/${path}`, {
-    headers: {'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
-    method: opts.method||'GET', body: opts.body
+// Funny notification messages
+const NOTIF_MSGS = [
+  (from,reps) => ({title:`💪 ${from} hat dich erwischt!`, body:`${reps} Liegestütze. Jetzt. Keine Ausreden.`}),
+  (from,reps) => ({title:`🫵 Runter auf den Boden!`, body:`${from} wartet auf deine ${reps} Liegestütze.`}),
+  (from,reps) => ({title:`😂 Oh nein...`, body:`${from} schickt dir ${reps} Liegestütze. Viel Spaß dabei!`}),
+  (from,reps) => ({title:`💀 ${from} hat keine Gnade`, body:`${reps} Liegestütze. Stell dich nicht so an.`}),
+  (from,reps) => ({title:`🏋️ Sport ist doch gesund!`, body:`${from} hat beschlossen, dass du heute trainierst. ${reps} Reps warten.`}),
+  (from,reps) => ({title:`😈 ${from} lacht gerade`, body:`${reps} Liegestütze. Das ist die Rache für alles.`}),
+  (from,reps) => ({title:`🔥 Keine Chance zu entkommen`, body:`${from} hat dich mit ${reps} Liegestützen erwischt. Los geht's!`}),
+  (from,reps) => ({title:`😤 ${from} meint es ernst`, body:`${reps} Liegestütze. Jetzt. Du weißt was zu tun ist.`}),
+  (from,reps) => ({title:`💣 Boom — ${reps} Liegestütze!`, body:`Von ${from}. Kein Mitleid, kein Pardon.`}),
+  (from,reps) => ({title:`🫣 Nicht ignorieren...`, body:`${from} sieht ob du sie machst. ${reps} Liegestütze!`}),
+];
+const DOUBLE_MSGS = [
+  (from,reps) => ({title:`⚠️ VERDOPPELT!`, body:`Du hast zu lange gewartet. Jetzt sind es ${reps} Liegestütze. Dank ${from}.`}),
+  (from,reps) => ({title:`😤 Immer noch nicht gemacht?`, body:`Jetzt ${reps} Liegestütze — hättest du früher machen sollen!`}),
+  (from,reps) => ({title:`🚨 Schulden wachsen!`, body:`${from} wundert sich. ${reps} Liegestütze warten auf dich.`}),
+];
+const FRIEND_REQ_MSGS = [
+  (from) => ({title:`👋 Neue Freundschaftsanfrage!`, body:`${from} will dich herausfordern. Nimm es an, wenn du dich traust.`}),
+  (from) => ({title:`🤝 ${from} will mitspielen`, body:`Freundschaftsanfrage erhalten. Bereit für Liegestütze?`}),
+];
+const COMPLETED_MSGS = [
+  (to,reps) => ({title:`✅ ${to} hat's gemacht!`, body:`${reps} Liegestütze erledigt. Revenge in 20 Min möglich 😏`}),
+  (to,reps) => ({title:`😤 ${to} hat sich gerächt`, body:`${reps} Liegestütze. Jetzt bist du dran...`}),
+];
+
+function rndMsg(arr, ...args) { return arr[Math.floor(Math.random()*arr.length)](...args); }
+
+async function supa(path,opts={}){
+  const r=await fetch(`${SUPA_URL}/rest/v1/${path}`,{
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
+    method:opts.method||'GET',body:opts.body
   });
-  const txt = await r.text();
-  if (!r.ok) throw new Error(txt);
-  return txt ? JSON.parse(txt) : null;
+  const txt=await r.text();
+  if(!r.ok)throw new Error(txt);
+  return txt?JSON.parse(txt):null;
 }
 
-const DB = {
-  getUser: u => supa(`users?username=eq.${encodeURIComponent(u)}&select=*`).then(r=>r&&r[0]||null),
-  createUser: d => supa('users',{method:'POST',body:JSON.stringify(d)}),
-  updateUser: (u,d) => supa(`users?username=eq.${encodeURIComponent(u)}`,{method:'PATCH',body:JSON.stringify(d)}),
-  searchUsers: q => supa(`users?or=(username.ilike.*${encodeURIComponent(q)}*,display.ilike.*${encodeURIComponent(q)}*)&select=username,display,reps_today&limit=8`),
-  getFriendships: u => supa(`friendships?or=(from_user.eq.${encodeURIComponent(u)},to_user.eq.${encodeURIComponent(u)})&select=*`),
-  createFriendship: d => supa('friendships',{method:'POST',body:JSON.stringify(d)}),
-  updateFriendship: (id,d) => supa(`friendships?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(d)}),
-  createChallenge: d => supa('challenges',{method:'POST',body:JSON.stringify(d)}),
-  // Get active incoming challenge (not completed)
-  getPending: u => supa(`challenges?to_user=eq.${encodeURIComponent(u)}&completed=eq.false&select=*&order=created_at.desc&limit=1`).then(r=>r&&r[0]||null),
-  completeChallenge: id => supa(`challenges?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({completed:true,completed_at:new Date().toISOString()})}),
-  // Get all challenges sent BY this user (to show status)
-  getSentChallenges: u => supa(`challenges?from_user=eq.${encodeURIComponent(u)}&select=*&order=created_at.desc&limit=20`),
+const DB={
+  getUser:u=>supa(`users?username=eq.${encodeURIComponent(u)}&select=*`).then(r=>r&&r[0]||null),
+  createUser:d=>supa('users',{method:'POST',body:JSON.stringify(d)}),
+  updateUser:(u,d)=>supa(`users?username=eq.${encodeURIComponent(u)}`,{method:'PATCH',body:JSON.stringify(d)}),
+  searchUsers:q=>supa(`users?or=(username.ilike.*${encodeURIComponent(q)}*,display.ilike.*${encodeURIComponent(q)}*)&select=username,display,reps_today,reps_week&limit=8`),
+  getFriendships:u=>supa(`friendships?or=(from_user.eq.${encodeURIComponent(u)},to_user.eq.${encodeURIComponent(u)})&select=*`),
+  createFriendship:d=>supa('friendships',{method:'POST',body:JSON.stringify(d)}),
+  updateFriendship:(id,d)=>supa(`friendships?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(d)}),
+  createChallenge:d=>supa('challenges',{method:'POST',body:JSON.stringify(d)}),
+  getPendingChallenges:u=>supa(`challenges?to_user=eq.${encodeURIComponent(u)}&completed=eq.false&select=*&order=created_at.asc`).then(r=>r||[]),
+  completeChallenge:(id,reps)=>supa(`challenges?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({completed:true,completed_at:new Date().toISOString(),reps})}),
+  updateChallengeReps:(id,reps)=>supa(`challenges?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({reps})}),
+  getSentChallenges:u=>supa(`challenges?from_user=eq.${encodeURIComponent(u)}&select=*&order=created_at.desc&limit=50`).then(r=>r||[]),
 };
 
-// ── State ──────────────────────────────────────────────────────────────
-const A = {
-  user: null, pending: null,
-  friendships: [], sentChallenges: [],
-  challengesSent: 0,
-  screen: 's-splash',
-  repsDone:0, repsRequired:10, goodReps:0, totalReps:0, workoutStart:0,
-  camStream:null, detector:null, rafId:null,
-  toastTimer:null, toastCB:null,
+const A={
+  user:null,pendingChallenges:[],sentChallenges:[],friendships:[],
+  screen:'s-splash',repsRequired:10,
+  repsDone:0,goodReps:0,totalReps:0,workoutStart:0,
+  camStream:null,detector:null,rafId:null,
+  toastTimer:null,toastCB:null,
+  dashTimer:null,
 };
-const pins = {su:'', li:''};
+const pins={su:'',li:''};
 
-// ── PIN ────────────────────────────────────────────────────────────────
+// ── PIN ───────────────────────────────────────────────────────────────
 function pk(id,n){if(pins[id].length>=4)return;pins[id]+=String(n);updDots(id);}
 function pd(id){pins[id]=pins[id].slice(0,-1);updDots(id);}
 function updDots(id){for(let i=0;i<4;i++)document.getElementById(`${id}-d${i}`).classList.toggle('filled',i<pins[id].length);}
 function resetPin(id){pins[id]='';updDots(id);}
 
-// ── Nav ────────────────────────────────────────────────────────────────
-function go(id) {
+// ── Nav ───────────────────────────────────────────────────────────────
+function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  A.screen = id;
-  if (id==='s-dash') renderDash();
-  if (id==='s-camera') initCamera();
-  if (id==='s-search') { document.getElementById('s-inp').value=''; document.getElementById('s-results').innerHTML=''; }
+  A.screen=id;
+  if(id==='s-dash'){renderDash();startDashTimer();}
+  else stopDashTimer();
+  if(id==='s-camera')initCamera();
+  if(id==='s-search'){document.getElementById('s-inp').value='';document.getElementById('s-results').innerHTML='';}
 }
+
+// ── Live timer on dash ────────────────────────────────────────────────
+function startDashTimer(){
+  stopDashTimer();
+  A.dashTimer=setInterval(()=>{
+    updateChallengeTimer();
+    updateCooldownDisplay();
+  },30000); // refresh every 30s
+}
+function stopDashTimer(){if(A.dashTimer){clearInterval(A.dashTimer);A.dashTimer=null;}}
+
 function showSpin(t){document.getElementById('full-spin-txt').textContent=t||'...';document.getElementById('full-spin').classList.add('show');}
 function hideSpin(){document.getElementById('full-spin').classList.remove('show');}
 function showErr(id,msg){const e=document.getElementById(id);e.textContent=msg;e.style.display='block';}
 function hideErr(id){const e=document.getElementById(id);if(e)e.style.display='none';}
 
-// ── Cooldown helpers ───────────────────────────────────────────────────
-function getCooldown() { return A.user?.cooldown_until || 0; }
-function isOnCooldown() { return getCooldown() > Date.now(); }
-function cooldownMins() { return Math.ceil((getCooldown() - Date.now()) / 60000); }
-
-async function setCooldown() {
-  const until = Date.now() + COOLDOWN_MS;
-  A.user.cooldown_until = until;
-  // Save to DB so it persists across refreshes
-  await DB.updateUser(A.user.username, {cooldown_until: until}).catch(()=>{});
+// ── Cooldown ──────────────────────────────────────────────────────────
+function isOnCooldown(){return(A.user?.cooldown_until||0)>Date.now();}
+function cooldownMins(){return Math.ceil(((A.user?.cooldown_until||0)-Date.now())/60000);}
+async function setCooldown(){
+  const until=Date.now()+COOLDOWN_MS;
+  A.user.cooldown_until=until;
+  await DB.updateUser(A.user.username,{cooldown_until:until}).catch(()=>{});
+}
+function updateCooldownDisplay(){
+  if(A.screen!=='s-dash')return;
+  // re-render friends list cooldown pills without full re-render
+  renderFriendsList();
 }
 
-// ── Auth ───────────────────────────────────────────────────────────────
-async function doSignup() {
-  const u = document.getElementById('su-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
-  const d = document.getElementById('su-disp').value.trim();
-  const p = pins['su'];
+// ── Debt calculation ──────────────────────────────────────────────────
+function calcDebt(){
+  return A.pendingChallenges.reduce((sum,c)=>sum+(c.reps||10),0);
+}
+
+// ── Auth ──────────────────────────────────────────────────────────────
+async function doSignup(){
+  const u=document.getElementById('su-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  const d=document.getElementById('su-disp').value.trim();
+  const p=pins['su'];
   hideErr('su-err');
-  if (!u){showErr('su-err','Username eingeben!');return;}
-  if (!d){showErr('su-err','Anzeigename eingeben!');return;}
-  if (p.length<4){showErr('su-err','4-stellige PIN eingeben!');return;}
+  if(!u){showErr('su-err','Username eingeben!');return;}
+  if(!d){showErr('su-err','Anzeigename eingeben!');return;}
+  if(p.length<4){showErr('su-err','4-stellige PIN eingeben!');return;}
   showSpin('ERSTELLE ACCOUNT...');
-  try {
-    const exists = await DB.getUser(u);
-    if (exists){hideSpin();showErr('su-err','Username vergeben!');return;}
-    const created = await DB.createUser({username:u,display:d,pin:p,reps_today:0,streak:1,cooldown_until:0});
-    A.user = created[0];
-    localStorage.setItem('gm10_sess', u);
-    A.friendships = [];
-    await checkPending();
-    connectRT(u);
-    setupNotifications();
-    hideSpin(); resetPin('su');
-    go('s-dash');
-  } catch(e){hideSpin();showErr('su-err','Fehler: '+e.message);}
+  try{
+    const exists=await DB.getUser(u);
+    if(exists){hideSpin();showErr('su-err','Username vergeben!');return;}
+    const res=await DB.createUser({username:u,display:d,pin:p,reps_today:0,reps_week:0,streak:1,cooldown_until:0,last_reset:new Date().toISOString().split('T')[0]});
+    A.user=res[0];
+    localStorage.setItem('gm10_sess',u);
+    A.friendships=[];A.pendingChallenges=[];A.sentChallenges=[];
+    connectRT(u);setupNotifications();
+    hideSpin();resetPin('su');go('s-dash');
+  }catch(e){hideSpin();showErr('su-err','Fehler: '+e.message);}
 }
 
-async function doLogin() {
-  const u = document.getElementById('li-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
-  const p = pins['li'];
+async function doLogin(){
+  const u=document.getElementById('li-user').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  const p=pins['li'];
   hideErr('li-err');
-  if (!u){showErr('li-err','Username eingeben!');return;}
-  if (p.length<4){showErr('li-err','PIN eingeben!');return;}
+  if(!u){showErr('li-err','Username eingeben!');return;}
+  if(p.length<4){showErr('li-err','PIN eingeben!');return;}
   showSpin('EINLOGGEN...');
-  try {
-    const user = await DB.getUser(u);
-    if (!user){hideSpin();showErr('li-err','Nicht gefunden.');return;}
-    if (user.pin !== p){hideSpin();showErr('li-err','Falsche PIN!');resetPin('li');return;}
-    A.user = user;
-    localStorage.setItem('gm10_sess', u);
-    A.friendships = await DB.getFriendships(u).catch(()=>[]);
-    A.sentChallenges = await DB.getSentChallenges(u).catch(()=>[]);
-    await checkPending();
-    // Reset reps_today if it's a new day
+  try{
+    const user=await DB.getUser(u);
+    if(!user){hideSpin();showErr('li-err','Nicht gefunden.');return;}
+    if(user.pin!==p){hideSpin();showErr('li-err','Falsche PIN!');resetPin('li');return;}
+    A.user=user;
+    localStorage.setItem('gm10_sess',u);
+    await loadAll();
     await checkDailyReset();
-    connectRT(u);
-    setupNotifications();
-    hideSpin(); resetPin('li');
-    go('s-dash');
-  } catch(e){hideSpin();showErr('li-err','Fehler: '+e.message);}
+    await checkAndDoubleOverdue();
+    connectRT(u);setupNotifications();
+    hideSpin();resetPin('li');go('s-dash');
+  }catch(e){hideSpin();showErr('li-err','Fehler: '+e.message);}
 }
 
-async function checkDailyReset() {
-  const today = new Date().toISOString().split('T')[0];
-  if (A.user.last_reset !== today) {
-    await DB.updateUser(A.user.username, {reps_today:0, last_reset:today}).catch(()=>{});
-    A.user.reps_today = 0;
-    A.user.last_reset = today;
+async function loadAll(){
+  const u=A.user.username;
+  [A.friendships,A.pendingChallenges,A.sentChallenges]=await Promise.all([
+    DB.getFriendships(u).catch(()=>[]),
+    DB.getPendingChallenges(u).catch(()=>[]),
+    DB.getSentChallenges(u).catch(()=>[]),
+  ]);
+}
+
+async function checkDailyReset(){
+  const today=new Date().toISOString().split('T')[0];
+  if(A.user.last_reset!==today){
+    // Reset daily reps but keep weekly (reset weekly on Monday)
+    const now=new Date();
+    const isMonday=now.getDay()===1;
+    const updates={reps_today:0,last_reset:today};
+    if(isMonday)updates.reps_week=0;
+    await DB.updateUser(A.user.username,updates).catch(()=>{});
+    A.user.reps_today=0;
+    A.user.last_reset=today;
+    if(isMonday)A.user.reps_week=0;
   }
 }
 
-// ── Dashboard ──────────────────────────────────────────────────────────
-async function renderDash() {
-  if (!A.user) return;
-  document.getElementById('d-name').textContent = A.user.display.toUpperCase();
-  document.getElementById('st-reps').textContent = A.user.reps_today || 0;
-  document.getElementById('st-sent').textContent = A.sentChallenges.filter(c=>!c.completed).length || 0;
-  document.getElementById('st-streak').textContent = A.user.streak || 1;
+// Double reps for overdue challenges (next day or after 1h)
+async function checkAndDoubleOverdue(){
+  const now=Date.now();
+  for(const ch of A.pendingChallenges){
+    const age=now-new Date(ch.created_at).getTime();
+    const today=new Date().toISOString().split('T')[0];
+    const chDay=ch.created_at.split('T')[0];
+    const isNextDay=chDay<today;
+    const isOver1h=age>DOUBLE_AFTER_MS;
+    const alreadyDoubled=ch.reps>10;
 
-  // Incoming challenge banner
-  const banner = document.getElementById('ch-banner');
-  if (A.pending) {
-    banner.classList.add('show');
-    document.getElementById('ch-from').textContent = `VON @${A.pending.from_user.toUpperCase()}`;
-  } else {
-    banner.classList.remove('show');
-  }
-
-  // Friend requests
-  const reqs = A.friendships.filter(f=>f.to_user===A.user.username&&f.status==='pending');
-  const rs = document.getElementById('req-sec');
-  if (reqs.length) {
-    rs.style.display = 'block';
-    document.getElementById('req-badge').textContent = `(${reqs.length})`;
-    const users = await Promise.all(reqs.map(r=>DB.getUser(r.from_user).catch(()=>null)));
-    document.getElementById('req-list').innerHTML = reqs.map((r,i)=>{
-      const u=users[i]; if(!u)return'';
-      return`<div class="req-row"><div class="fr-av ${avCls(u.username)}">${avL(u)}</div><div class="req-name">@${u.username}</div><button class="req-btn req-acc" onclick="acceptReq('${r.id}','${u.username}')">✓ Accept</button><button class="req-btn req-dec" onclick="declineReq('${r.id}')">✕</button></div>`;
-    }).join('');
-  } else rs.style.display='none';
-
-  // Friends list with challenge status
-  const friends = A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
-  const fl = document.getElementById('fr-list');
-  if (!friends.length){fl.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:20px;">Noch keine Freunde — tap + ADD</div>';return;}
-  const fUsers = await Promise.all(friends.map(u=>DB.getUser(u).catch(()=>null)));
-  const onCd = isOnCooldown();
-  const cdMins = onCd ? cooldownMins() : 0;
-
-  fl.innerHTML = fUsers.filter(Boolean).map(u => {
-    // Find if there's an active/recent challenge to this friend
-    const sent = A.sentChallenges.find(c=>c.to_user===u.username);
-    let action = '';
-    if (sent && !sent.completed) {
-      // Challenge pending — waiting for them
-      action = `<div class="pending-pill">⏳ PENDING</div>`;
-    } else if (sent && sent.completed) {
-      // They completed it!
-      action = `<div class="done-pill">✓ GEMACHT</div>`;
-    } else if (onCd) {
-      action = `<div class="cd-pill">⏳ ${cdMins}m</div>`;
-    } else {
-      action = `<button class="fire-btn" onclick="sendChallenge('${u.username}')">💪 SEND</button>`;
+    if(isNextDay&&!alreadyDoubled){
+      // Overnight → double
+      const newReps=ch.reps*2;
+      await DB.updateChallengeReps(ch.id,newReps).catch(()=>{});
+      ch.reps=newReps;
+      sendLocalNotif(rndMsg(DOUBLE_MSGS,ch.from_user,newReps));
+    }else if(isOver1h&&!alreadyDoubled){
+      // Over 1h → double
+      const newReps=ch.reps*2;
+      await DB.updateChallengeReps(ch.id,newReps).catch(()=>{});
+      ch.reps=newReps;
+      sendLocalNotif(rndMsg(DOUBLE_MSGS,ch.from_user,newReps));
     }
+  }
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────
+async function renderDash(){
+  if(!A.user)return;
+  document.getElementById('d-name').textContent=A.user.display.toUpperCase();
+  document.getElementById('st-reps').textContent=A.user.reps_today||0;
+  document.getElementById('st-week').textContent=A.user.reps_week||0;
+  const debt=calcDebt();
+  const debtEl=document.getElementById('st-debt');
+  debtEl.textContent=debt;
+  debtEl.className='stat-n'+(debt>0?' debt':'');
+
+  updateChallengeTimer();
+  await renderFriendRequests();
+  await renderFriendsList();
+}
+
+function updateChallengeTimer(){
+  const banner=document.getElementById('ch-banner');
+  if(!A.pendingChallenges.length){banner.classList.remove('show');return;}
+
+  // Show the oldest pending challenge
+  const ch=A.pendingChallenges[0];
+  const age=Date.now()-new Date(ch.created_at).getTime();
+  const isDoubled=ch.reps>10;
+  const over1h=age>DOUBLE_AFTER_MS;
+
+  banner.className='ch-banner show '+(isDoubled?'doubled':'normal');
+  document.getElementById('ch-from').textContent=`VON @${ch.from_user.toUpperCase()}${A.pendingChallenges.length>1?' (+'+( A.pendingChallenges.length-1)+' mehr)':''}`;
+
+  const reps=ch.reps||10;
+  document.getElementById('ch-title').textContent=isDoubled
+    ?`⚠️ VERDOPPELT — ${reps} Pushups!`
+    :`${reps} Pushups schuldig 💪`;
+
+  // Timer display
+  const timer=document.getElementById('ch-timer');
+  if(over1h||isDoubled){
+    timer.textContent='Schon verdoppelt — mach sie endlich!';
+    timer.className='ch-timer warn';
+  }else{
+    const minsUntilDouble=Math.ceil((DOUBLE_AFTER_MS-age)/60000);
+    timer.textContent=`Noch ${minsUntilDouble} Min bis zur Verdoppelung ⏳`;
+    timer.className='ch-timer';
+  }
+
+  document.getElementById('ch-btn').textContent=`JETZT MACHEN (${reps} Reps) →`;
+  document.getElementById('ch-btn').className=`btn ${isDoubled?'btn-orange':'btn-red'}`;
+  A.repsRequired=reps;
+}
+
+async function renderFriendRequests(){
+  const reqs=A.friendships.filter(f=>f.to_user===A.user.username&&f.status==='pending');
+  const rs=document.getElementById('req-sec');
+  if(!reqs.length){rs.style.display='none';return;}
+  rs.style.display='block';
+  document.getElementById('req-badge').textContent=`(${reqs.length})`;
+  const users=await Promise.all(reqs.map(r=>DB.getUser(r.from_user).catch(()=>null)));
+  document.getElementById('req-list').innerHTML=reqs.map((r,i)=>{
+    const u=users[i];if(!u)return'';
+    return`<div class="req-row"><div class="fr-av ${avCls(u.username)}">${avL(u)}</div><div class="req-name">@${u.username}</div><button class="req-btn req-acc" onclick="acceptReq('${r.id}','${u.username}')">✓ Accept</button><button class="req-btn req-dec" onclick="declineReq('${r.id}')">✕</button></div>`;
+  }).join('');
+}
+
+async function renderFriendsList(){
+  const friends=A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
+  const fl=document.getElementById('fr-list');
+  if(!friends.length){fl.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:20px;">Noch keine Freunde — tap + ADD</div>';return;}
+  const fUsers=await Promise.all(friends.map(u=>DB.getUser(u).catch(()=>null)));
+  const onCd=isOnCooldown();
+  const cdMins=onCd?cooldownMins():0;
+
+  fl.innerHTML=fUsers.filter(Boolean).map(u=>{
+    const sent=A.sentChallenges.find(c=>c.to_user===u.username&&!c.completed);
+    const lastDone=A.sentChallenges.find(c=>c.to_user===u.username&&c.completed);
+    let action='';
+    if(sent){
+      const age=Date.now()-new Date(sent.created_at).getTime();
+      const overdue=age>DOUBLE_AFTER_MS;
+      action=overdue
+        ?`<div class="overdue-pill">😤 ÜBERFÄLLIG</div>`
+        :`<div class="pending-pill">⏳ PENDING</div>`;
+    }else if(onCd){
+      action=`<div class="cd-pill">⏳ ${cdMins}m</div>`;
+    }else{
+      action=`<button class="fire-btn" onclick="sendChallenge('${u.username}')">💪 SEND</button>`;
+    }
+    const weekReps=u.reps_week||0;
     return`<div class="fr-row">
       <div class="fr-av ${avCls(u.username)}">${avL(u)}</div>
-      <div class="fr-info"><div class="fr-name">${u.display}</div><div class="fr-meta">@${u.username} · ${u.reps_today||0} reps heute</div></div>
+      <div class="fr-info">
+        <div class="fr-name">${u.display}</div>
+        <div class="fr-meta">@${u.username} · ${u.reps_today||0} heute · ${weekReps} diese Woche</div>
+      </div>
       ${action}
     </div>`;
   }).join('');
-
-  // Auto-refresh cooldown
-  if (onCd) setTimeout(()=>{ if(A.screen==='s-dash') renderDash(); }, 60000);
 }
 
-// ── Send challenge ─────────────────────────────────────────────────────
-async function sendChallenge(to) {
-  if (isOnCooldown()) {
-    toast('⏳',`Noch ${cooldownMins()} Min warten!`,'Cooldown nach deinen Pushups',null);
-    return;
-  }
-  try {
-    const ch = await DB.createChallenge({from_user:A.user.username,to_user:to,reps:10,completed:false});
-    A.sentChallenges.unshift(ch[0]);
-    toast('📨',`Challenge an @${to}!`,'Sie müssen jetzt Liegestütze machen 😈',null);
-    renderDash();
-  } catch(e){toast('❌','Fehler',e.message,null);}
+// ── Send challenge ────────────────────────────────────────────────────
+async function sendChallenge(to){
+  if(isOnCooldown()){toast('⏳',`Noch ${cooldownMins()} Min Cooldown!`,'Nach deinen Pushups warten',null);return;}
+  try{
+    const res=await DB.createChallenge({from_user:A.user.username,to_user:to,reps:10,completed:false});
+    A.sentChallenges.unshift(res[0]);
+    toast('📨',`Challenge an @${to}!`,'Warte auf ihre Liegestütze 😈',null);
+    renderFriendsList();
+  }catch(e){toast('❌','Fehler',e.message,null);}
 }
 
-// ── Friends ────────────────────────────────────────────────────────────
-async function doSearch() {
-  const q = document.getElementById('s-inp').value.trim();
-  const c = document.getElementById('s-results');
-  if (!q){c.innerHTML='';return;}
-  try {
-    const res = (await DB.searchUsers(q)).filter(u=>u.username!==A.user.username);
-    if (!res.length){c.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:16px;">Niemanden gefunden</div>';return;}
-    const myF = A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
-    const pend = A.friendships.filter(f=>f.from_user===A.user.username&&f.status==='pending').map(f=>f.to_user);
-    c.innerHTML = res.map(u=>{
-      const isFr=myF.includes(u.username), isSent=pend.includes(u.username);
-      return`<div class="sr-card"><div class="fr-av ${avCls(u.username)}">${avL(u)}</div><div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:15px;">${u.display}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sub);margin-top:2px;">@${u.username} · ${u.reps_today||0} reps</div></div>${isFr?'<button class="add-btn" disabled>✓ Freund</button>':isSent?'<button class="add-btn" disabled style="background:var(--s3);color:var(--sub);">SENT</button>':`<button class="add-btn" onclick="sendReq('${u.username}')">ADD +</button>`}</div>`;
+// ── Friends ───────────────────────────────────────────────────────────
+async function doSearch(){
+  const q=document.getElementById('s-inp').value.trim();
+  const c=document.getElementById('s-results');
+  if(!q){c.innerHTML='';return;}
+  try{
+    const res=(await DB.searchUsers(q)).filter(u=>u.username!==A.user.username);
+    if(!res.length){c.innerHTML='<div style="color:var(--sub);font-family:\'JetBrains Mono\',monospace;font-size:12px;text-align:center;padding:16px;">Niemanden gefunden</div>';return;}
+    const myF=A.friendships.filter(f=>f.status==='accepted').map(f=>f.from_user===A.user.username?f.to_user:f.from_user);
+    const pend=A.friendships.filter(f=>f.from_user===A.user.username&&f.status==='pending').map(f=>f.to_user);
+    c.innerHTML=res.map(u=>{
+      const isFr=myF.includes(u.username),isSent=pend.includes(u.username);
+      return`<div class="sr-card"><div class="fr-av ${avCls(u.username)}">${avL(u)}</div><div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:15px;">${u.display}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sub);margin-top:2px;">@${u.username} · ${u.reps_today||0} heute · ${u.reps_week||0} diese Woche</div></div>${isFr?'<button class="add-btn" disabled>✓</button>':isSent?'<button class="add-btn" disabled style="background:var(--s3);color:var(--sub);">SENT</button>':`<button class="add-btn" onclick="sendReq('${u.username}')">ADD +</button>`}</div>`;
     }).join('');
-  } catch(e){c.innerHTML=`<div style="color:var(--red);font-size:12px;padding:16px;">${e.message}</div>`;}
+  }catch(e){c.innerHTML=`<div style="color:var(--red);font-size:12px;padding:16px;">${e.message}</div>`;}
 }
-
-async function sendReq(to) {
-  try{await DB.createFriendship({from_user:A.user.username,to_user:to,status:'pending'});A.friendships=await DB.getFriendships(A.user.username);doSearch();toast('📨',`Anfrage an @${to}!`,'',null);}
-  catch(e){toast('❌','Fehler',e.message,null);}
+async function sendReq(to){
+  try{
+    await DB.createFriendship({from_user:A.user.username,to_user:to,status:'pending'});
+    A.friendships=await DB.getFriendships(A.user.username);
+    doSearch();
+    toast('📨',`Anfrage an @${to}!`,'',null);
+  }catch(e){toast('❌','Fehler',e.message,null);}
 }
-async function acceptReq(id,from) {
-  try{await DB.updateFriendship(id,{status:'accepted'});A.friendships=await DB.getFriendships(A.user.username);renderDash();toast('✅',`@${from} ist jetzt dein Freund!`,'',null);}catch(e){}
+async function acceptReq(id,from){
+  try{
+    await DB.updateFriendship(id,{status:'accepted'});
+    A.friendships=await DB.getFriendships(A.user.username);
+    renderDash();
+    toast('✅',`@${from} ist jetzt dein Freund!`,'Jetzt gegenseitig challengen!',null);
+  }catch(e){}
 }
-async function declineReq(id) {
+async function declineReq(id){
   try{await DB.updateFriendship(id,{status:'declined'});A.friendships=await DB.getFriendships(A.user.username);renderDash();}catch(e){}
 }
 
-// ── Challenge / Pending ────────────────────────────────────────────────
-async function checkPending() {
-  try {
-    const ch = await DB.getPending(A.user.username);
-    if (ch) A.pending = ch;
-  } catch(e){}
+// ── Incoming challenge ────────────────────────────────────────────────
+function onIncoming(ch){
+  if(A.pendingChallenges.find(c=>c.id===ch.id))return;
+  A.pendingChallenges.push(ch);
+  A.repsRequired=ch.reps||10;
+  if(A.screen==='s-dash')renderDash();
+  const msg=rndMsg(NOTIF_MSGS,ch.from_user,ch.reps||10);
+  toast('🔒',msg.title,msg.body,'workout');
+  sendLocalNotif(msg);
 }
 
-function onIncoming(ch) {
-  if (A.pending?.id === ch.id) return;
-  A.pending = ch;
-  if (A.screen==='s-dash') renderDash();
-  toast('🔒',`@${ch.from_user} challengt dich!`,'10 Pushups jetzt machen! 💪','workout');
-  // Browser notification
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(reg=>reg.showNotification('💪 Gib Mir 10!',{
-      body:`@${ch.from_user} fordert dich zu 10 Pushups heraus!`,
-      tag:'challenge',requireInteraction:true
-    })).catch(()=>{});
+function onChallengeUpdated(ch){
+  // Update in pending list (reps changed)
+  const idx=A.pendingChallenges.findIndex(c=>c.id===ch.id);
+  if(idx>=0)A.pendingChallenges[idx]=ch;
+  if(A.screen==='s-dash')updateChallengeTimer();
+}
+
+function onSentCompleted(ch){
+  const idx=A.sentChallenges.findIndex(c=>c.id===ch.id);
+  if(idx>=0)A.sentChallenges[idx]=ch;
+  if(A.screen==='s-dash')renderFriendsList();
+  const msg=rndMsg(COMPLETED_MSGS,ch.to_user,ch.reps||10);
+  toast('✅',msg.title,msg.body,null);
+  sendLocalNotif(msg);
+}
+
+function onFriendRequest(fs){
+  A.friendships.push(fs);
+  if(A.screen==='s-dash')renderDash();
+  const msg=rndMsg(FRIEND_REQ_MSGS,fs.from_user);
+  toast('👋',msg.title,msg.body,null);
+  sendLocalNotif(msg);
+}
+
+function startWorkout(){
+  // Use reps from oldest pending challenge
+  if(A.pendingChallenges.length){
+    A.repsRequired=A.pendingChallenges[0].reps||10;
   }
-}
-
-function onChallengeCompleted(ch) {
-  // Update sent challenges list
-  const idx = A.sentChallenges.findIndex(c=>c.id===ch.id);
-  if (idx>=0) A.sentChallenges[idx] = ch;
-  if (A.screen==='s-dash') renderDash();
-  toast('✅',`@${ch.to_user} hat die Pushups gemacht!`,'Revenge in 20 Min möglich 😏',null);
-}
-
-function startWorkout() {
   A.repsDone=0;A.goodReps=0;A.totalReps=0;A.workoutStart=Date.now();
+  document.getElementById('c-rl').textContent=`${A.repsRequired} REPS ÜBRIG`;
   go('s-camera');
 }
 
-// ── Realtime ───────────────────────────────────────────────────────────
-function connectRT(username) {
-  function connect() {
-    try {
-      const ws = new WebSocket(`wss://gqfkizrbfiozkjgcxpuw.supabase.co/realtime/v1/websocket?apikey=${SUPA_KEY}&vsn=1.0.0`);
-      ws.onopen = () => ws.send(JSON.stringify({
-        topic:'realtime:public:challenges', event:'phx_join', ref:'1',
+// ── Realtime ──────────────────────────────────────────────────────────
+function connectRT(username){
+  function connect(){
+    try{
+      const ws=new WebSocket(`wss://gqfkizrbfiozkjgcxpuw.supabase.co/realtime/v1/websocket?apikey=${SUPA_KEY}&vsn=1.0.0`);
+      ws.onopen=()=>ws.send(JSON.stringify({
+        topic:'realtime:public:challenges',event:'phx_join',ref:'1',
         payload:{config:{postgres_changes:[
           {event:'INSERT',schema:'public',table:'challenges',filter:`to_user=eq.${username}`},
-          {event:'UPDATE',schema:'public',table:'challenges',filter:`from_user=eq.${username}`}
+          {event:'UPDATE',schema:'public',table:'challenges',filter:`to_user=eq.${username}`},
+          {event:'UPDATE',schema:'public',table:'challenges',filter:`from_user=eq.${username}`},
         ]}}
       }));
-      ws.onmessage = e => {
-        try {
-          const m = JSON.parse(e.data);
-          const rec = m.payload?.data?.record || m.payload?.record;
-          if (!rec) return;
-          if (rec.to_user===username && !rec.completed) onIncoming(rec);
-          if (rec.from_user===username && rec.completed) onChallengeCompleted(rec);
-        } catch{}
+      ws.onopen=()=>{
+        // Also listen for friendship inserts
+        ws.send(JSON.stringify({topic:'realtime:public:challenges',event:'phx_join',ref:'1',payload:{config:{postgres_changes:[{event:'INSERT',schema:'public',table:'challenges',filter:`to_user=eq.${username}`},{event:'UPDATE',schema:'public',table:'challenges'}]}}}));
+        ws.send(JSON.stringify({topic:'realtime:public:friendships',event:'phx_join',ref:'2',payload:{config:{postgres_changes:[{event:'INSERT',schema:'public',table:'friendships',filter:`to_user=eq.${username}`}]}}}));
       };
-      ws.onclose = () => setTimeout(connect, 3000);
-    } catch(e){}
+      ws.onmessage=e=>{
+        try{
+          const m=JSON.parse(e.data);
+          const rec=m.payload?.data?.record||m.payload?.record;
+          if(!rec)return;
+          // Challenge insert = incoming challenge
+          if(m.topic?.includes('challenges')&&m.event==='*'&&rec.to_user===username&&!rec.completed)onIncoming(rec);
+          // Challenge update = reps changed or completed
+          if(m.topic?.includes('challenges')&&rec.to_user===username&&!rec.completed)onChallengeUpdated(rec);
+          if(m.topic?.includes('challenges')&&rec.from_user===username&&rec.completed)onSentCompleted(rec);
+          // Friendship insert = friend request
+          if(m.topic?.includes('friendships')&&rec.to_user===username&&rec.status==='pending')onFriendRequest(rec);
+        }catch{}
+      };
+      ws.onclose=()=>setTimeout(connect,3000);
+    }catch(e){}
   }
   connect();
   // Polling fallback every 15s
   setInterval(async()=>{
-    if (!A.user) return;
-    try {
-      const ch = await DB.getPending(username);
-      if (ch && A.pending?.id !== ch.id) onIncoming(ch);
-    } catch{}
-    // Also refresh sent challenges to catch completions
-    try {
-      const sent = await DB.getSentChallenges(username);
-      const prev = A.sentChallenges;
-      A.sentChallenges = sent;
-      // Check if any newly completed
-      sent.forEach(c=>{
-        const old = prev.find(p=>p.id===c.id);
-        if (c.completed && old && !old.completed) onChallengeCompleted(c);
+    if(!A.user)return;
+    try{
+      const pending=await DB.getPendingChallenges(username);
+      pending.forEach(ch=>{
+        if(!A.pendingChallenges.find(c=>c.id===ch.id))onIncoming(ch);
+        else{
+          // Check if reps doubled
+          const existing=A.pendingChallenges.find(c=>c.id===ch.id);
+          if(existing&&ch.reps!==existing.reps)onChallengeUpdated(ch);
+        }
       });
-    } catch{}
-  }, 15000);
+      // Check sent completions
+      const sent=await DB.getSentChallenges(username);
+      sent.forEach(ch=>{
+        const old=A.sentChallenges.find(c=>c.id===ch.id);
+        if(old&&!old.completed&&ch.completed)onSentCompleted(ch);
+      });
+      A.sentChallenges=sent;
+    }catch{}
+    // Check overdue doubling every poll
+    await checkAndDoubleOverdue();
+  },15000);
 }
 
-// ── Notifications ──────────────────────────────────────────────────────
-async function setupNotifications() {
-  try {
-    if (!('serviceWorker' in navigator)) return;
+// ── Notifications ─────────────────────────────────────────────────────
+async function setupNotifications(){
+  try{
+    if(!('serviceWorker' in navigator))return;
     await navigator.serviceWorker.register('sw.js');
-    if (Notification.permission==='default') await Notification.requestPermission();
-  } catch(e){}
+    if(Notification.permission==='default')await Notification.requestPermission();
+  }catch(e){}
+}
+function sendLocalNotif({title,body}){
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.ready.then(reg=>reg.showNotification(title,{
+      body,tag:'gibmir10',requireInteraction:true,
+      icon:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="14" fill="%23ff2d55"/%3E%3Ctext y="46" x="32" text-anchor="middle" font-size="40"%3E%F0%9F%92%AA%3C/text%3E%3C/svg%3E'
+    })).catch(()=>{});
+  }
 }
 
-// ── MoveNet Camera ─────────────────────────────────────────────────────
-let vid, canvas, ctx2, lastState='up', detecting=false;
-async function initCamera() {
+// ── MoveNet Camera ────────────────────────────────────────────────────
+let vid,canvas,ctx2,lastState='up',detecting=false;
+async function initCamera(){
   vid=document.getElementById('vid');canvas=document.getElementById('pc');ctx2=canvas.getContext('2d');
   A.repsDone=0;A.goodReps=0;A.totalReps=0;lastState='up';detecting=false;
   updateCamUI();showLoad('KAMERA STARTET...');
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});
     A.camStream=stream;vid.srcObject=stream;
     await new Promise(r=>{vid.onloadedmetadata=r;});
     canvas.width=vid.videoWidth||640;canvas.height=vid.videoHeight||480;
     showLoad('KI MODELL LÄDT...');
-    if (!A.detector) A.detector=await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet,{modelType:poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,enableSmoothing:true});
+    if(!A.detector)A.detector=await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet,{modelType:poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,enableSmoothing:true});
     hideLoad();startLoop();
-  } catch(e){console.warn(e);hideLoad();startSim();}
+  }catch(e){console.warn(e);hideLoad();startSim();}
 }
 function startLoop(){
   detecting=true;
@@ -688,16 +850,27 @@ async function complete(){
   stopCam();
   const elapsed=Math.round((Date.now()-A.workoutStart)/1000);
   const formPct=A.totalReps>0?Math.round((A.goodReps/A.totalReps)*100):100;
+  const repsJustDone=A.repsDone;
+  document.getElementById('d-reps').textContent=repsJustDone;
   document.getElementById('d-time').textContent=elapsed;
   document.getElementById('d-form').textContent=formPct+'%';
+
+  // Mark oldest pending challenge as done
+  const ch=A.pendingChallenges.shift();
   try{
-    if(A.pending?.id) await DB.completeChallenge(A.pending.id);
-    A.user.reps_today=(A.user.reps_today||0)+A.repsRequired;
-    // Save cooldown + reps to DB in one call
+    if(ch?.id)await DB.completeChallenge(ch.id,repsJustDone);
+    A.user.reps_today=(A.user.reps_today||0)+repsJustDone;
+    A.user.reps_week=(A.user.reps_week||0)+repsJustDone;
+    await DB.updateUser(A.user.username,{reps_today:A.user.reps_today,reps_week:A.user.reps_week});
     await setCooldown();
-    await DB.updateUser(A.user.username,{reps_today:A.user.reps_today});
   }catch(e){}
-  A.pending=null;
+
+  // Check if more challenges pending
+  if(A.pendingChallenges.length){
+    document.getElementById('done-sub').textContent=`Noch ${A.pendingChallenges.length} Challenge(s) offen! 💀`;
+  }else{
+    document.getElementById('done-sub').textContent='Alle Schulden bezahlt! 🎉';
+  }
   go('s-done');
 }
 
@@ -710,7 +883,7 @@ function stopCam(){
 function showLoad(t){document.getElementById('load-txt').textContent=t;document.getElementById('load-ov').style.display='flex';}
 function hideLoad(){document.getElementById('load-ov').style.display='none';}
 
-// ── Toast ──────────────────────────────────────────────────────────────
+// ── Toast ─────────────────────────────────────────────────────────────
 function toast(ico,title,sub,action){
   document.getElementById('t-ico').textContent=ico;
   document.getElementById('t-title').textContent=title;
@@ -725,16 +898,13 @@ function toast(ico,title,sub,action){
 function hideToast(){document.getElementById('toast').classList.remove('show');}
 function toastAct(){hideToast();if(A.toastCB)A.toastCB();}
 
-// ── Utils ──────────────────────────────────────────────────────────────
+// ── Utils ─────────────────────────────────────────────────────────────
 function avL(u){return u?(u.display||u.username||'?')[0].toUpperCase():'?';}
 function avCls(u){const c=['av0','av1','av2','av3','av4'];let h=0;for(const x of(u||''))h+=x.charCodeAt(0);return c[h%5];}
 
-// ── Service Worker ─────────────────────────────────────────────────────
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 
-// ── Restore session ────────────────────────────────────────────────────
+// ── Restore session ───────────────────────────────────────────────────
 (async()=>{
   const sess=localStorage.getItem('gm10_sess');
   if(!sess)return;
@@ -743,10 +913,9 @@ if('serviceWorker' in navigator){
     const user=await DB.getUser(sess);
     if(user){
       A.user=user;
-      A.friendships=await DB.getFriendships(sess).catch(()=>[]);
-      A.sentChallenges=await DB.getSentChallenges(sess).catch(()=>[]);
-      await checkPending();
+      await loadAll();
       await checkDailyReset();
+      await checkAndDoubleOverdue();
       connectRT(sess);
       setupNotifications();
       hideSpin();

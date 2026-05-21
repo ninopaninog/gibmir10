@@ -497,10 +497,13 @@ async function renderDash(){
   document.getElementById('d-name').textContent=A.user.display.toUpperCase();
   document.getElementById('st-reps').textContent=A.user.reps_today||0;
   document.getElementById('st-week').textContent=A.user.reps_week||0;
-  const debt=calcDebt();
+  // Sent = challenges sent by me that are still pending (not completed)
+  const activeSent=A.sentChallenges.filter(c=>!c.completed).length;
   const debtEl=document.getElementById('st-debt');
+  const debt=calcDebt();
   debtEl.textContent=debt;
   debtEl.className='stat-n'+(debt>0?' debt':'');
+  document.getElementById('st-sent') && (document.getElementById('st-sent').textContent=activeSent);
 
   updateChallengeTimer();
   await renderFriendRequests();
@@ -564,7 +567,8 @@ async function renderFriendsList(){
 
   fl.innerHTML=fUsers.filter(Boolean).map(u=>{
     const sent=A.sentChallenges.find(c=>c.to_user===u.username&&!c.completed);
-    const lastDone=A.sentChallenges.find(c=>c.to_user===u.username&&c.completed);
+    // Check if this friend sent US a pending challenge (revenge block)
+    const theyOweUs=A.pendingChallenges.find(c=>c.from_user===u.username);
     let action='';
     if(sent){
       const age=Date.now()-new Date(sent.created_at).getTime();
@@ -572,6 +576,9 @@ async function renderFriendsList(){
       action=overdue
         ?`<div class="overdue-pill">😤 ÜBERFÄLLIG</div>`
         :`<div class="pending-pill">⏳ PENDING</div>`;
+    }else if(theyOweUs){
+      // They challenged us and we haven't done it yet — can't revenge yet
+      action=`<div class="cd-pill">🚫 Erst deine Reps!</div>`;
     }else if(onCd){
       action=`<div class="cd-pill">⏳ ${cdMins}m</div>`;
     }else{

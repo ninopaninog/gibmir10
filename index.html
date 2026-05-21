@@ -423,6 +423,8 @@ function canSendTo(username) {
 
   return {can: true};
 }
+
+function calcDebt(){
   return A.pendingChallenges.reduce((sum,c)=>sum+(c.reps||10),0);
 }
 

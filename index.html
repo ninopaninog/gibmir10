@@ -392,8 +392,37 @@ function updateCooldownDisplay(){
   renderFriendsList();
 }
 
-// ── Debt calculation ──────────────────────────────────────────────────
-function calcDebt(){
+// ── Daily send reset at 05:00 ─────────────────────────────────────────
+function getResetDay(date) {
+  // "Day" starts at 05:00 — before 05:00 it's still "yesterday"
+  const now = date ? new Date(date) : new Date();
+  if (now.getHours() < 5) {
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    return yesterday.toISOString().split('T')[0];
+  }
+  return now.toISOString().split('T')[0];
+}
+
+function canSendTo(username) {
+  // Block if they sent us a challenge we haven't completed yet
+  const theyOweUs = A.pendingChallenges.find(c => c.from_user === username);
+  if (theyOweUs) return {can: false, reason: '🚫 Erst deine Reps!'};
+
+  // Block if on cooldown (20 min after completing pushups)
+  if (isOnCooldown()) return {can: false, reason: `⏳ ${cooldownMins()}m Cooldown`};
+
+  // Block if already sent today (since 05:00) and not completed
+  const today = getResetDay();
+  const sentToday = A.sentChallenges.find(c =>
+    c.to_user === username &&
+    !c.completed &&
+    getResetDay(new Date(c.created_at)) === today
+  );
+  if (sentToday) return {can: false, reason: '⏳ PENDING'};
+
+  return {can: true};
+}
   return A.pendingChallenges.reduce((sum,c)=>sum+(c.reps||10),0);
 }
 
@@ -566,9 +595,8 @@ async function renderFriendsList(){
   const cdMins=onCd?cooldownMins():0;
 
   fl.innerHTML=fUsers.filter(Boolean).map(u=>{
-    const sent=A.sentChallenges.find(c=>c.to_user===u.username&&!c.completed);
-    // Check if this friend sent US a pending challenge (revenge block)
-    const theyOweUs=A.pendingChallenges.find(c=>c.from_user===u.username);
+    const {can, reason} = canSendTo(u.username);
+    const sent = A.sentChallenges.find(c=>c.to_user===u.username&&!c.completed);
     let action='';
     if(sent){
       const age=Date.now()-new Date(sent.created_at).getTime();
@@ -576,11 +604,8 @@ async function renderFriendsList(){
       action=overdue
         ?`<div class="overdue-pill">😤 ÜBERFÄLLIG</div>`
         :`<div class="pending-pill">⏳ PENDING</div>`;
-    }else if(theyOweUs){
-      // They challenged us and we haven't done it yet — can't revenge yet
-      action=`<div class="cd-pill">🚫 Erst deine Reps!</div>`;
-    }else if(onCd){
-      action=`<div class="cd-pill">⏳ ${cdMins}m</div>`;
+    }else if(!can){
+      action=`<div class="cd-pill">${reason}</div>`;
     }else{
       action=`<button class="fire-btn" onclick="sendChallenge('${u.username}')">💪 SEND</button>`;
     }
@@ -598,7 +623,8 @@ async function renderFriendsList(){
 
 // ── Send challenge ────────────────────────────────────────────────────
 async function sendChallenge(to){
-  if(isOnCooldown()){toast('⏳',`Noch ${cooldownMins()} Min Cooldown!`,'Nach deinen Pushups warten',null);return;}
+  const {can, reason} = canSendTo(to);
+  if(!can){toast('🚫', reason, '', null); return;}
   try{
     const res=await DB.createChallenge({from_user:A.user.username,to_user:to,reps:10,completed:false});
     A.sentChallenges.unshift(res[0]);
